@@ -5,7 +5,7 @@
 # %% auto 0
 __all__ = ['create_parser', 'validate_args', 'args_to_config', 'run_cli', 'main']
 
-# %% ../nbs/04_cli.ipynb 3
+# %% ../nbs/04_cli.ipynb 4
 import argparse
 import sys
 import logging
@@ -14,7 +14,7 @@ from typing import List, Optional
 
 from .pipeline import PipelineConfig, OligoCodonPipeline
 
-# %% ../nbs/04_cli.ipynb 5
+# %% ../nbs/04_cli.ipynb 6
 def create_parser() -> argparse.ArgumentParser:
     """Create command-line argument parser.
     
@@ -65,7 +65,7 @@ def create_parser() -> argparse.ArgumentParser:
     
     return parser
 
-# %% ../nbs/04_cli.ipynb 7
+# %% ../nbs/04_cli.ipynb 8
 def validate_args(args: argparse.Namespace) -> bool:
     """Validate command-line arguments.
     
@@ -93,7 +93,7 @@ def validate_args(args: argparse.Namespace) -> bool:
     
     return True
 
-# %% ../nbs/04_cli.ipynb 8
+# %% ../nbs/04_cli.ipynb 9
 def args_to_config(args: argparse.Namespace) -> PipelineConfig:
     """Convert command-line arguments to pipeline configuration.
     
@@ -119,7 +119,7 @@ def args_to_config(args: argparse.Namespace) -> PipelineConfig:
         log_level=log_level
     )
 
-# %% ../nbs/04_cli.ipynb 9
+# %% ../nbs/04_cli.ipynb 10
 def run_cli(args: Optional[List[str]] = None) -> int:
     """Run the command-line interface.
     
@@ -177,7 +177,7 @@ def run_cli(args: Optional[List[str]] = None) -> int:
         else:
             raise
 
-# %% ../nbs/04_cli.ipynb 10
+# %% ../nbs/04_cli.ipynb 11
 def main():
     """Main entry point for command-line execution."""
     # Only actually call sys.exit() when running as a script, not in tests or notebooks
@@ -207,7 +207,7 @@ def main():
     else:
         return run_cli()
 
-# %% ../nbs/04_cli.ipynb 11
+# %% ../nbs/04_cli.ipynb 12
 #| eval: false
 if __name__ == "__main__":
     # For safety, wrap in try/except to catch any SystemExit
