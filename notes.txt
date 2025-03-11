@@ -1,0 +1,23 @@
+run nbdev_prepare before 
+git add .
+git commit -m'Initial commit'
+git push
+
+then 
+nbdev_export
+
+then 
+pip install -e '.[dev]' (this way any edits are immidiately avaiable)
+
+
+for later on
+
+nbdev_export
+nbdev_test
+nbdev_clean
+nbdev_readme
+
+(or) nbdev_prepare 
+git add .
+git commit -m 'Add `say_hello`; update index' # Update this text with your own message
+git push
