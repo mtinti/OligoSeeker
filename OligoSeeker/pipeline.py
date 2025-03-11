@@ -241,15 +241,9 @@ class OligoCodonPipeline:
         self.logger.info(f"Saving results to: {os.path.join(self.config.output_path, output_file)}")
         saved_path = ResultsSaver.save_csv(result_df, self.config.output_path, output_file)
         
-        # Also save as Excel with summary sheet
-        #excel_output = self.config.get_output_filename("xlsx")
-        #excel_path = ResultsSaver.save_excel(result_df, self.config.output_path, excel_output)
-        
         # Generate summary
         summary = ResultsFormatter.summarize_results(result_df)
         
-        #json_output = self.config.get_output_filename("json").replace("_counts", "_summary")
-        #json_path = ResultsSaver.save_summary(summary, self.config.output_path, json_output)
         
         # Calculate elapsed time
         end_time = time.time()

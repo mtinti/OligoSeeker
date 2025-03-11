@@ -105,39 +105,6 @@ class ResultsSaver:
         df.to_csv(output_file)
         return str(output_file)
     
-    ###
-    #@staticmethod
-    #def save_excel(df: pd.DataFrame, output_path: str, 
-    #              filename: str = 'oligo_counts.xlsx', create_dir: bool = True) -> str:
-    #    """Save results to an Excel file.
-    #    
-    #    Args:
-    #        df: DataFrame containing oligo codon counts
-    #       output_path: Directory to save the file
-    #        filename: Name of the output file (default: 'oligo_counts.xlsx')
-    #        create_dir: Whether to create the output directory if it doesn't exist (default: True)
-    #        
-    #    Returns:
-    #        Full path to the saved file
-    #    """
-    #    output_dir = Path(output_path)
-    #    if create_dir:
-    #        output_dir.mkdir(exist_ok=True, parents=True)
-    #        
-    #    output_file = output_dir / filename
-    #    
-    #    # Create Excel writer
-    #    with pd.ExcelWriter(output_file) as writer:
-    #        # Write main data
-    #        df.to_excel(writer, sheet_name="Codon Counts")
-    #        
-    #        # Create a summary sheet
-    #        summary = ResultsFormatter.summarize_results(df)
-    #        summary_df = pd.DataFrame.from_dict(summary, orient='index', columns=['Value'])
-    #        summary_df.to_excel(writer, sheet_name="Summary")
-    #        
-    #    return str(output_file)
-    ###
     @staticmethod
     def save_summary(results_summary: Dict, output_path: str, 
                      filename: str = 'oligo_summary.json', create_dir: bool = True) -> str:

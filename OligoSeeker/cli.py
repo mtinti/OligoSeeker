@@ -12,6 +12,7 @@ import logging
 import os
 from typing import List, Optional
 
+from .merge import merge_count_csvs
 from .pipeline import PipelineConfig, OligoCodonPipeline
 
 # %% ../nbs/04_cli.ipynb 6
@@ -26,17 +27,25 @@ def create_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     
-    # Required arguments
-    parser.add_argument('--f1', '--fastq_1', dest='fastq_path_1', required=True,
+    # Mode selection
+    parser.add_argument('-m', '--mode', dest='mode', 
+                        choices=['count', 'merge'],
+                        default='count',
+                        help="Operation mode: 'count' to process FASTQ files or 'merge' to combine CSV counts")
+    
+    # Count mode options
+    count_group = parser.add_argument_group("Count Mode Options")
+    
+    count_group.add_argument('--f1', '--fastq_1', dest='fastq_path_1',
                         default="../test_fastq_files/test_1.fq.gz",
-                        help="Path to FASTQ 1 file")
+                        help="Path to FASTQ 1 file (required for count mode)")
     
-    parser.add_argument('--f2', '--fastq_2', dest='fastq_path_2', required=True,
+    count_group.add_argument('--f2', '--fastq_2', dest='fastq_path_2',
                         default="../test_fastq_files/test_2.fq.gz",
-                        help="Path to FASTQ 2 file")   
+                        help="Path to FASTQ 2 file (required for count mode)")
     
-    # Oligo source (at least one required)
-    oligo_group = parser.add_argument_group("Oligo Source Options (one required)")
+    # Oligo source (at least one required for count mode)
+    oligo_group = parser.add_argument_group("Oligo Source Options")
     
     oligo_group.add_argument('--oligos-file', dest='oligos_file',
                            help="File containing oligo sequences (one per line)")
@@ -45,15 +54,31 @@ def create_parser() -> argparse.ArgumentParser:
                              default="GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT,GTCGTAGAAAATNNNTGGGTGATGAGC",
                            help="Comma-separated list of oligo sequences")
     
-    # Output options
-    parser.add_argument('-o', '--output', dest='output_path', default="./results",
+    oligo_group.add_argument('--offset', dest='offset_oligo', type=int, default=1,
+                        help="Value to add to oligo index in output") 
+
+    # Merge mode options
+    merge_group = parser.add_argument_group("Merge Mode Options")
+    
+    merge_group.add_argument('--input-dir', dest='input_dir',
+                           help="Directory containing CSV files to merge (required for merge mode)")
+    
+    merge_group.add_argument('--output-file', dest='output_file', 
+                           default="merged_counts.csv",
+                           help="Name of the output merged file")
+    
+    merge_group.add_argument('--pattern', dest='pattern', 
+                           default="*count*.csv",
+                           help="Pattern to match CSV files")
+    
+    # Common options
+    parser.add_argument('-o', '--output', dest='output_path', default="../test_files/test_outs",
                         help="Output directory for results")
     
     parser.add_argument('--prefix', dest='output_prefix', default="",
                         help="Prefix for output files")
     
-    parser.add_argument('--offset', dest='offset_oligo', type=int, default=1,
-                        help="Value to add to oligo index in output")
+
     
     # Logging options
     parser.add_argument('--log-file', dest='log_file',
@@ -75,22 +100,25 @@ def validate_args(args: argparse.Namespace) -> bool:
     Returns:
         True if arguments are valid, False otherwise
     """
-    if not (args.oligos_file or args.oligos_string):
-        print("Error: You must specify either --oligos-file or --oligos")
-        return False
+    # Only validate count mode arguments
+    if args.mode == 'count':
+        if not (args.oligos_file or args.oligos_string):
+            print("Error: You must specify either --oligos-file or --oligos in count mode")
+            return False
+            
+        if args.oligos_file and not os.path.exists(args.oligos_file):
+            print(f"Error: Oligos file does not exist: {args.oligos_file}")
+            return False
+            
+        if not os.path.exists(args.fastq_path_1):
+            print(f"Error: FASTQ file 1 does not exist: {args.fastq_path_1}")
+            return False
         
-    if args.oligos_file and not os.path.exists(args.oligos_file):
-        print(f"Error: Oligos file does not exist: {args.oligos_file}")
-        return False
-        
-    if not os.path.exists(args.fastq_path_1):
-        print(f"Error: FASTQ file 1 does not exist: {args.fastq_path_1}")
-        return False
+        if not os.path.exists(args.fastq_path_2):
+            print(f"Error: FASTQ file 2 does not exist: {args.fastq_path_2}")
+            return False
     
-    if not os.path.exists(args.fastq_path_2):
-        print(f"Error: FASTQ file 2 does not exist: {args.fastq_path_2}")
-        return False        
-    
+    # Merge mode validation happens in run_cli
     return True
 
 # %% ../nbs/04_cli.ipynb 9
@@ -137,33 +165,61 @@ def run_cli(args: Optional[List[str]] = None) -> int:
     try:
         parsed_args = parser.parse_args(args)
         
-        if not validate_args(parsed_args):
-            parser.print_help()
-            return 1
-        
-        # Convert args to config
-        config = args_to_config(parsed_args)
-        
-        # When testing, we might want to mock the pipeline run
-        if is_testing and os.environ.get('MOCK_PIPELINE') == '1':
-            print("Mock pipeline run (for testing)")
-            return 0
+        # Handle different modes
+        if parsed_args.mode == 'merge':
+            # Merge mode
+            if not parsed_args.input_dir:
+                print("Error: --input-dir is required for merge mode")
+                return 1
             
-        # Run pipeline
-        pipeline = OligoCodonPipeline(config)
-        results = pipeline.run()
+            # Perform merge operation
+            merged_df = merge_count_csvs(
+                input_dir=parsed_args.input_dir,
+                output_file=parsed_args.output_file,
+                output_dir=parsed_args.output_path,
+                pattern=parsed_args.pattern
+            )
+            
+            print(f"\nMerge completed successfully!")
+            print(f"Merged {len(merged_df)} unique codons across all input files")
+            print(f"Results contain {len(merged_df.columns)} oligo columns")
+            
+            return 0
         
-        # Print summary information
-        print("\nResults saved to:")
-        print(f"  CSV: {results['csv_path']}")
-        if 'excel_path' in results:
-            print(f"  Excel: {results['excel_path']}")
-        if 'json_path' in results:
-            print(f"  Summary JSON: {results['json_path']}")
+        elif parsed_args.mode == 'count':
+            # Count mode - validate required arguments
+            if not validate_args(parsed_args):
+                parser.print_help()
+                return 1
+            
+            # Convert args to config
+            config = args_to_config(parsed_args)
+            
+            # When testing, we might want to mock the pipeline run
+            if is_testing and os.environ.get('MOCK_PIPELINE') == '1':
+                print("Mock pipeline run (for testing)")
+                return 0
+                
+            # Run pipeline
+            pipeline = OligoCodonPipeline(config)
+            results = pipeline.run()
+            
+            # Print summary information
+            print("\nResults saved to:")
+            print(f"  CSV: {results['csv_path']}")
+            if 'excel_path' in results:
+                print(f"  Excel: {results['excel_path']}")
+            if 'json_path' in results:
+                print(f"  Summary JSON: {results['json_path']}")
+            
+            print(f"\nProcessed {results['oligos_processed']} oligos in {results['elapsed_time']:.2f} seconds")
+            
+            return 0
         
-        print(f"\nProcessed {results['oligos_processed']} oligos in {results['elapsed_time']:.2f} seconds")
-        
-        return 0
+        else:
+            print(f"Error: Unknown mode: {parsed_args.mode}")
+            return 1
+    
     except Exception as e:
         print(f"Error: {str(e)}")
         import traceback
@@ -185,27 +241,40 @@ def main():
     
     # Use test arguments when in test/notebook environment
     if is_notebook_or_test:
+        # Test count mode
         test_args = [
+            '-m', 'count',
             '--f1', '../test_files/test_1.fq.gz',
             '--f2', '../test_files/test_2.fq.gz',
             '--oligos', 'GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT,GTCGTAGAAAATNNNTGGGTGATGAGC',
-            '--output', '../test_files/test_outs',
+            '-o', '../test_files/test_outs',
             '--prefix', 'test_cm1'
         ]
         run_cli(test_args)
 
         test_args = [
+            '-m', 'count',
             '--f1', '../test_files/test_1.fq.gz',
             '--f2', '../test_files/test_2.fq.gz',
             '--oligos-file', '../test_files/oligos.txt',
-            '--output', '../test_files/test_outs',
+            '-o', '../test_files/test_outs',
             '--prefix', 'test_cm2'
         ]
         run_cli(test_args)
         
-        return 0
+        
+        
+        # Test merge mode
+        test_args = [
+            '-m', 'merge',
+            '--input-dir', '../test_files/test_outs',
+            '-o', '../test_files/test_outs',
+            '--output-file', 'merged_results.csv'
+        ]
+        
+        return run_cli(test_args)
     else:
-        return run_cli()
+        return sys.exit(run_cli())
 
 # %% ../nbs/04_cli.ipynb 12
 #| eval: false
@@ -218,4 +287,8 @@ if __name__ == "__main__":
             print(f"\nCLI completed with exit code: {exit_code}")
     except SystemExit as e:
         # Just in case, catch any SystemExit and print instead
-        print(f"\nSystemExit caught with code: {e.code}")
+        is_notebook_or_test = 'ipykernel' in sys.modules or 'pytest' in sys.modules or 'NBDEV_TEST' in os.environ
+        if is_notebook_or_test:
+            print(f"\nSystemExit caught with code: {e.code}")
+        else:
+            raise

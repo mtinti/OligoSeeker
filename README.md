@@ -29,9 +29,9 @@ oligonucleotide analysis.
 - Process paired FASTQ files (gzipped or uncompressed)
 - Search for custom oligo sequences with codon sites (NNN)
 - Support for both forward and reverse complement matching
-- Comprehensive results in CSV and Excel formats
-- Progress reporting for long-running operations
-- User-friendly command-line interface
+- Comprehensive results in CSV format
+- Merge functionality to combine results from multiple samples
+- User-friendly command-line interface with multiple modes
 - Modular design for integration with other tools
 
 ## How It Works
@@ -42,9 +42,14 @@ FASTQ reads. When it finds a match, it extracts the codon sequence
 The library handles both forward and reverse complement matching,
 ensuring comprehensive detection.
 
-The basic workflow is: 1. Load and validate oligo sequences 2. Process
-paired FASTQ files 3. Count codon occurrences for each oligo 4. Output
-results in csv format
+The basic count workflow is: 1. Load and validate oligo sequences 2.
+Process paired FASTQ files 3. Count codon occurrences for each oligo 4.
+Output results in CSV format
+
+Additionally, the merge workflow allows you to: 1. Process multiple
+samples independently 2. Combine the count results from different runs
+3. Sum the codon occurrences across samples 4. Analyze patterns across a
+larger dataset
 
 ## Quick Start
 
@@ -72,8 +77,6 @@ config = PipelineConfig(
     output_prefix='test1'
 )
 
-
-
 # Create and run the pipeline
 pipeline = OligoCodonPipeline(config)
 results = pipeline.run()
@@ -82,19 +85,21 @@ results = pipeline.run()
 print(f"Results saved to: {results['csv_path']}")
 ```
 
-    2025-03-11 17:03:59,076 - INFO - Starting OligoCodonPipeline
-    2025-03-11 17:03:59,077 - INFO - Loading oligo sequences...
-    2025-03-11 17:03:59,078 - INFO - Using provided oligo list
-    2025-03-11 17:03:59,078 - INFO - Loaded 3 oligo sequences
-    2025-03-11 17:03:59,079 - INFO - Processing FASTQ files...
+    /Users/MTinti/miniconda3/envs/work3/lib/python3.10/site-packages/pandas/core/arrays/masked.py:60: UserWarning: Pandas requires version '1.3.6' or newer of 'bottleneck' (version '1.3.4' currently installed).
+      from pandas.core import (
+    2025-03-11 19:50:45,590 - INFO - Starting OligoCodonPipeline
+    2025-03-11 19:50:45,591 - INFO - Loading oligo sequences...
+    2025-03-11 19:50:45,591 - INFO - Using provided oligo list
+    2025-03-11 19:50:45,591 - INFO - Loaded 3 oligo sequences
+    2025-03-11 19:50:45,592 - INFO - Processing FASTQ files...
 
     0it [00:00, ?it/s]
 
-    2025-03-11 17:03:59,132 - INFO - Formatting results...
-    2025-03-11 17:03:59,134 - INFO - Saving results to: ../test_files/test_outs/test_counts.csv
-    2025-03-11 17:03:59,139 - INFO - Pipeline completed in 0.06 seconds
+    2025-03-11 19:50:45,666 - INFO - Formatting results...
+    2025-03-11 19:50:45,669 - INFO - Saving results to: ../test_files/test_outs/test1_counts.csv
+    2025-03-11 19:50:45,679 - INFO - Pipeline completed in 0.09 seconds
 
-    Results saved to: ../test_files/test_outs/test_counts.csv
+    Results saved to: ../test_files/test_outs/test1_counts.csv
 
 ``` python
 # this should show 20, 40 and 60 matches
@@ -180,19 +185,101 @@ results = pipeline.run()
 print(f"Results saved to: {results['csv_path']}")
 ```
 
-    2025-03-11 17:16:28,838 - INFO - Starting OligoCodonPipeline
-    2025-03-11 17:16:28,839 - INFO - Loading oligo sequences...
-    2025-03-11 17:16:28,840 - INFO - Loading oligos from file: ../test_files/oligos.txt
-    2025-03-11 17:16:28,841 - INFO - Loaded 3 oligo sequences
-    2025-03-11 17:16:28,842 - INFO - Processing FASTQ files...
+    2025-03-11 19:51:08,402 - INFO - Starting OligoCodonPipeline
+    2025-03-11 19:51:08,403 - INFO - Loading oligo sequences...
+    2025-03-11 19:51:08,404 - INFO - Loading oligos from file: ../test_files/oligos.txt
+    2025-03-11 19:51:08,407 - INFO - Loaded 3 oligo sequences
+    2025-03-11 19:51:08,407 - INFO - Processing FASTQ files...
 
     0it [00:00, ?it/s]
 
-    2025-03-11 17:16:28,899 - INFO - Formatting results...
-    2025-03-11 17:16:28,900 - INFO - Saving results to: ../test_files/test_outs/test2_counts.csv
-    2025-03-11 17:16:28,905 - INFO - Pipeline completed in 0.07 seconds
+    2025-03-11 19:51:08,462 - INFO - Formatting results...
+    2025-03-11 19:51:08,463 - INFO - Saving results to: ../test_files/test_outs/test2_counts.csv
+    2025-03-11 19:51:08,468 - INFO - Pipeline completed in 0.07 seconds
 
     Results saved to: ../test_files/test_outs/test2_counts.csv
+
+### Merging Count Files
+
+You can merge multiple count files from different runs to combine
+results:
+
+``` python
+from OligoSeeker.merge import merge_count_csvs
+
+# Merge all count files in a directory
+merged_df = merge_count_csvs(
+    input_dir="../test_files/test_outs",  # Directory containing count files
+    output_file="merged_counts.csv",      # Output filename
+    output_dir="../test_files/merged",    # Output directory
+    pattern="*_counts.csv"                # Pattern to match files
+)
+
+print(f"Merged {len(merged_df)} codons across {len(merged_df.columns)} oligos")
+merged_df.head()
+```
+
+    Found 6 CSV files to merge
+      Loaded ../test_files/test_outs/test_cm2_counts.csv with 4 rows and 3 columns
+      Loaded ../test_files/test_outs/test2_counts.csv with 4 rows and 3 columns
+      Loaded ../test_files/test_outs/test1_counts.csv with 4 rows and 3 columns
+      Loaded ../test_files/test_outs/test_cm3_counts.csv with 3 rows and 2 columns
+      Loaded ../test_files/test_outs/test_cm4_counts.csv with 4 rows and 3 columns
+      Loaded ../test_files/test_outs/test_cm1_counts.csv with 4 rows and 3 columns
+    Merged data saved to ../test_files/merged/merged_counts.csv
+    Merged 4 codons across 3 oligos
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>1_GCGGATTACATTNNNAAATAACATCGT</th>
+      <th>2_TGTGGTAAGCGGNNNGAAAGCATTTGT</th>
+      <th>3_GTCGTAGAAAATNNNTGGGTGATGAGC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AAA</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>300.0</td>
+    </tr>
+    <tr>
+      <th>ACT</th>
+      <td>120.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>GGC</th>
+      <td>0.0</td>
+      <td>240.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>none</th>
+      <td>11880.0</td>
+      <td>11760.0</td>
+      <td>9700.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 ## Modules
 
@@ -223,44 +310,89 @@ The [pipeline module](./pipeline.html) provides the complete processing
 pipeline: - PipelineConfig for configuration settings - ProgressReporter
 for progress tracking - OligoCodonPipeline for end-to-end processing
 
+### Merge
+
+The [merge module](./merge.html) provides functionality to combine
+multiple count results: - Merge count CSV files by summing values -
+Support for flexible output naming and location - Pattern matching to
+select specific files
+
 ### CLI
 
 The [CLI module](./cli.html) implements the command-line interface: -
 Argument parsing - Configuration validation - Pipeline execution
 
+## Quick Start
+
+### Command-Line Usage
+
+For count mode (processing FASTQ files):
+
+``` bash
+# Using oligos directly specified
+oligoseeker -m count --f1 test_files/test_1.fq.gz --f2 test_files/test_2.fq.gz \
+--oligos "GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT" \
+--output test_outs --prefix test_run1
+
+# Using oligos from a file
+oligoseeker -m count --f1 test_files/test_1.fq.gz --f2 test_files/test_2.fq.gz \
+--oligos-file test_files/oligos.txt --output test_outs --prefix test_run2
+```
+
+For merge mode (combining multiple count files):
+
+``` bash
+# Merge all count files in a directory
+oligoseeker -m merge --input-dir test_outs --output test_outs/merged \
+--output-file combined_counts.csv
+```
+
 ## CLI Reference
 
 ``` bash
-usage: oligoseeker [-h] --f1 FASTQ_PATH_1 --f2 FASTQ_PATH_2
-                   [--oligos-file OLIGOS_FILE] [--oligos OLIGOS_STRING]
-                   [-o OUTPUT_PATH] [--prefix OUTPUT_PREFIX] [--offset OFFSET_OLIGO]
-                   [--log-file LOG_FILE]
-                   [--log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}]
+usage: oligoseeker [-h] [-m {count,merge}] [--f1 FASTQ_PATH_1] [--f2 FASTQ_PATH_2]
+                  [--oligos-file OLIGOS_FILE] [--oligos OLIGOS_STRING]
+                  [--offset OFFSET_OLIGO] [--input-dir INPUT_DIR]
+                  [--output-file OUTPUT_FILE] [--pattern PATTERN]
+                  [-o OUTPUT_PATH] [--prefix OUTPUT_PREFIX]
+                  [--log-file LOG_FILE]
+                  [--log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}]
 
 OligoSeeker: Process FASTQ files to count oligo codons
 
 options:
   -h, --help            show this help message and exit
-  --f1 FASTQ_PATH_1, --fastq_1 FASTQ_PATH_1
-                        Path to FASTQ 1 file (default: ../test_fastq_files/test_1.fq.gz)
-  --f2 FASTQ_PATH_2, --fastq_2 FASTQ_PATH_2
-                        Path to FASTQ 2 file (default: ../test_fastq_files/test_2.fq.gz)
+  -m {count,merge}, --mode {count,merge}
+                        Operation mode: 'count' to process FASTQ files or 'merge' to combine CSV counts (default: count)
   -o OUTPUT_PATH, --output OUTPUT_PATH
-                        Output directory for results (default: ./results)
+                        Output directory for results (default: ../test_files/test_outs)
   --prefix OUTPUT_PREFIX
                         Prefix for output files (default: )
-  --offset OFFSET_OLIGO
-                        Value to add to oligo index in output (default: 1)
   --log-file LOG_FILE   Path to log file (if not specified, logs to console only)
   --log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}
                         Logging level (default: INFO)
 
-Oligo Source Options (one required):
+Count Mode Options:
+  --f1 FASTQ_PATH_1, --fastq_1 FASTQ_PATH_1
+                        Path to FASTQ 1 file (default: ../test_fastq_files/test_1.fq.gz)
+  --f2 FASTQ_PATH_2, --fastq_2 FASTQ_PATH_2
+                        Path to FASTQ 2 file (default: ../test_fastq_files/test_2.fq.gz)
+
+Oligo Source Options:
   --oligos-file OLIGOS_FILE
                         File containing oligo sequences (one per line)
   --oligos OLIGOS_STRING
                         Comma-separated list of oligo sequences
                         (default: GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT,GTCGTAGAAAATNNNTGGGTGATGAGC)
+  --offset OFFSET_OLIGO
+                        Value to add to oligo index in output (default: 1)
+
+Merge Mode Options:
+  --input-dir INPUT_DIR
+                        Directory containing CSV files to merge (required for merge mode)
+  --output-file OUTPUT_FILE
+                        Name of the output merged file (default: merged_counts.csv)
+  --pattern PATTERN     Pattern to match CSV files (default: *count*.csv)
 ```
 
 ## Data Requirements
