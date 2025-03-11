@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "OligoSeeker"
+  site-url: "https://mtinti.github.io/OligoSeeker"
+  description: "A Python tool for processing paired FASTQ files to efficiently count oligo codons."
+  repo-branch: main
+  repo-url: "https://github.com/mtinti/OligoSeeker"
