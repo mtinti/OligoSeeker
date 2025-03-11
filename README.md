@@ -56,9 +56,25 @@ larger dataset
 ### Command-Line Usage
 
 ``` bash
-# Basic usage with oligos file
-oligoseeker --f1 test_files/test_1.fq.gz --f2 test_files/test_2.fq.gz \
---oligos "GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT" --output test_outs --prefix test_cm2
+# Basic usage with oligos
+!oligoseeker -m count \
+--f1 ../test_files/test_1.fq.gz \
+--f2 ../test_files/test_2.fq.gz \
+--oligos "GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT" \
+--output ../test_files/test_outs --prefix test_cm3
+
+# Basic usage with oligos files
+oligoseeker -m count \
+--f1 ../test_files/test_1.fq.gz \
+--f2 ../test_files/test_2.fq.gz \
+--oligos-file '../test_files/oligos.txt' \
+--output ../test_files/test_outs --prefix test_cm4
+
+# Basic usage to merge oligo counts
+oligoseeker -m merge \
+--output-file 'merge_cl.csv' \
+--input-dir ../test_files/test_outs \
+--output ../test_files/merged 
 ```
 
 ### Python API Usage
@@ -102,7 +118,8 @@ print(f"Results saved to: {results['csv_path']}")
     Results saved to: ../test_files/test_outs/test1_counts.csv
 
 ``` python
-# this should show 20, 40 and 60 matches
+# this should show 20 (ACT), 40 (GGC) and 60 matches (AAA) for
+# oligo 1, 2 and 3 respectievely
 import pandas as pd
 out = pd.read_csv(results['csv_path'],index_col=[0])
 out.head()
