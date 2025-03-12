@@ -110,6 +110,29 @@ samples independently 2. Combine the count results from different runs
 3. Sum the codon occurrences across samples 4. Analyze patterns across a
 larger dataset
 
+## Performance and Compatibility
+
+OligoSeeker has been tested on both Linux and macOS platforms
+
+- **Test Case**: 1 oligo (33 bp) analyzed in 150 bp paired-end FASTQ
+  files containing 300 million reads
+- **Processing Time**:
+  - \~1 hour on a high-performance compute cluster
+  - \~1.5 hours on a standard MacBook Pro
+
+### Scalability
+
+For large datasets, we’ve implemented an efficient workflow to
+significantly increase throughput:
+
+1.  **File Splitting**: Large FASTQ files are split into smaller chunks
+    using [seqkit](https://bioinf.shenwei.me/seqkit/), a
+    high-performance toolkit for FASTA/Q file manipulation
+2.  **Parallel Processing**: OligoSeeker is applied in parallel to each
+    chunk independently
+3.  **Result Merging**: Individual results are merged using
+    OligoSeeker’s built-in merge functionality
+
 ## Quick Start
 
 ### Command-Line Usage
