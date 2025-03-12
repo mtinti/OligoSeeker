@@ -5,15 +5,13 @@ OligoSeeker
 
 ### A Python library for processing FASTQ files to count oligo codons
 
-<div>
+> <div>
+> [![DOI](https://zenodo.org/badge/946567115.svg)](https://doi.org/10.5281/zenodo.15011916)
+> </div>
 
-[![](https://zenodo.org/badge/946567115.svg)](https://doi.org/10.5281/zenodo.15011916)
+### Reference
 
-DOI
-
-</div>
-
-https://mtinti.github.io/OligoSeeker/
+> https://mtinti.github.io/OligoSeeker/
 
 ## Installation
 
