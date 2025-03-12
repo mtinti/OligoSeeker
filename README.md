@@ -5,9 +5,8 @@ OligoSeeker
 
 ### A Python library for processing FASTQ files to count oligo codons
 
-> <div>
 > [![DOI](https://zenodo.org/badge/946567115.svg)](https://doi.org/10.5281/zenodo.15011916)
-> </div>
+
 
 ### Reference
 
