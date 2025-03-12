@@ -8,7 +8,7 @@ OligoSeeker
 You can install the package via pip:
 
 ``` bash
-pip install OligoSeeker
+pip install oligoseeker
 ```
 
 Or directly from the repository:
@@ -33,6 +33,65 @@ oligonucleotide analysis.
 - Merge functionality to combine results from multiple samples
 - User-friendly command-line interface with multiple modes
 - Modular design for integration with other tools
+
+## Scientific Background: Oligonucleotide-Targeted Mutagenesis
+
+Oligonucleotide-targeted mutagenesis is a powerful technique in
+molecular biology that enables precise alterations of DNA sequences. In
+this approach, synthetic oligonucleotides (short DNA fragments,
+typically 20-60 nucleotides) are designed to target specific locations
+in a gene, allowing researchers to introduce defined mutations.
+
+### The Structure of Mutagenic Oligos
+
+A typical mutagenic oligo has three distinct components:
+
+1.  **5’ Homology Arm**: A sequence that matches the target DNA upstream
+    of the mutation site, providing specificity.
+2.  **Mutation Site (NNN)**: The actual mutation being introduced, often
+    represented as “NNN” when a mixture of all possible codons is used.
+3.  **3’ Homology Arm**: A sequence that matches the target DNA
+    downstream of the mutation site, providing additional specificity.
+
+For example, if our target DNA sequence is:
+
+    5'-ATGCATGCATGCATGCATGCATGCATGCATGC-3'
+
+And we want to mutagenize the underlined codon:
+
+    5'-ATGCATGCATGCAT___GCATGCATGCATGCATGC-3'
+
+We would design an oligo like:
+
+    5'-ATGCATGCATGCATNNNGCATGCATGCATGC-3'
+
+### Why Use NNN Codons?
+
+The “NNN” in the oligo represents a mixture of all possible nucleotide
+combinations at that position: - N = A mixture of A, T, G, and C - NNN =
+All 64 possible codons (4³ = 64)
+
+This approach allows: - **Saturation mutagenesis**: Testing all possible
+amino acid substitutions at a position - **Structure-function studies**:
+Identifying critical residues in proteins - **Protein engineering**:
+Optimizing enzyme activity or stability
+
+### Deep Sequencing of Mutagenesis Libraries
+
+After the mutagenesis reaction, the resulting DNA library contains a
+mixture of variants with different codons at the target position.
+Next-generation sequencing technologies allow researchers to sequence
+thousands or millions of these variants simultaneously.
+
+`OligoSeeker` helps analyze this sequencing data by: 1. Identifying
+reads that contain the mutagenic oligo 2. Extracting the specific codon
+present at the NNN position 3. Counting the frequency of each codon
+variant
+
+This information is crucial for: - Verifying library coverage (were all
+possible codons incorporated?) - Quantifying biases in the mutagenesis
+process - Analyzing selection experiments where certain variants may be
+enriched
 
 ## How It Works
 

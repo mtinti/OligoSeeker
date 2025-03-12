@@ -96,8 +96,7 @@ class OligoCodonProcessor:
         self.oligos = oligos
         self.compiled_oligos = [OligoRegex(oligo) for oligo in oligos]
     
-    def process_fastq_pair(self, r1_path: str, r2_path: str, 
-                           progress_callback: Optional[callable] = None) -> OligoCounter:
+    def process_fastq_pair(self, r1_path: str, r2_path: str,) -> OligoCounter:
         """Process a pair of FASTQ files to count oligo codons.
         
         Args:
@@ -110,27 +109,10 @@ class OligoCodonProcessor:
         """
         results = defaultdict(Counter)
         
-        # Count the total number of reads for progress reporting
-        #total_reads = 0
-        #if progress_callback:
-        #    # First pass to count reads
-        #    with FastqHandler.open_fastq(r1_path) as f:
-        #        for _ in FastqGeneralIterator(f):
-        #            total_reads += 1
-        
-        # Process read pairs
         processed_reads = 0
         for read_1, read_2 in tqdm(FastqHandler.fastq_pair_iterator(r1_path, r2_path), ):
             for i, compiled in enumerate(self.compiled_oligos):
                 codon = compiled.find_codon(read_1[1], read_2[1])
                 results[i][codon] += 1
-            
-        #    processed_reads += 1
-        #    if progress_callback and processed_reads % 10000 == 0:
-        #        progress_callback(processed_reads, total_reads)
-        
-        # Final progress update
-        #if progress_callback:
-        #    progress_callback(processed_reads, total_reads)
-        #print(results)    
+  
         return results

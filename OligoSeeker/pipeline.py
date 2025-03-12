@@ -230,7 +230,7 @@ class OligoCodonPipeline:
         # Process FASTQ files
         self.logger.info("Processing FASTQ files...")
         processor = OligoCodonProcessor(self.oligos)
-        results = processor.process_fastq_pair(r1_path, r2_path, self.progress_callback)
+        results = processor.process_fastq_pair(r1_path, r2_path)
         
         # Format results
         self.logger.info("Formatting results...")

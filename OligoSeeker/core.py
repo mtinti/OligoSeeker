@@ -99,7 +99,7 @@ class OligoRegex:
         # No match found
         return 'none'
 
-# %% ../nbs/00_core.ipynb 14
+# %% ../nbs/00_core.ipynb 16
 class OligoLoader:
     """Loads and validates oligo sequences from different sources."""
     
@@ -140,24 +140,36 @@ class OligoLoader:
     @staticmethod
     def validate_oligos(oligos: List[str]) -> List[str]:
         """Validate a list of oligo sequences.
-        
+
         Args:
             oligos: List of oligo sequences to validate
-            
+
         Returns:
             The validated list of oligos
-            
+
         Raises:
-            ValueError: If duplicate oligos found or invalid characters detected
+            ValueError: If duplicate oligos found, invalid characters detected, or NNN pattern issues
         """
         # Check for duplicates
         if len(oligos) != len(set(oligos)):
             raise ValueError("Duplicate oligos found")
-        
+
         # Check for valid characters
         is_valid, invalid_chars = DNAUtils.validate_oligos(oligos)
         if not is_valid:
             invalid_chars_str = ','.join(invalid_chars)
             raise ValueError(f"Invalid characters found in oligos: {invalid_chars_str}")
-        
+
+        # Check for NNN pattern - each oligo must contain exactly one NNN codon
+        invalid_oligos = []
+        for oligo in oligos:
+            nnn_count = oligo.count('NNN')
+            if nnn_count != 1:
+                raise ValueError(f"{oligo} (contains {nnn_count} NNN patterns, must have exactly 1)")
+                
+
+        if invalid_oligos:
+            error_msg = "Invalid NNN pattern in oligos:\n" + "\n".join(invalid_oligos)
+            raise ValueError(error_msg)
+
         return oligos
