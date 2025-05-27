@@ -11,42 +11,115 @@ import pandas as pd
 import json
 from pathlib import Path
 from collections import Counter
-from typing import Dict, List, Tuple, Set
+from typing import Dict, List, Tuple, Set, Any
 from .core import OligoCounter
 
 # %% ../nbs/02_output.ipynb 6
 class ResultsFormatter:
     """Formats oligo codon counting results for output."""
     
-    @staticmethod
-    def to_dataframe(results: OligoCounter, oligos: List[str], offset: int = 1) -> pd.DataFrame:
-        """Convert results to a pandas DataFrame.
+    DEFAULT_GENCODE = {
+        'ATA':'I', 'ATC':'I', 'ATT':'I', 'ATG':'M',
+        'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
+        'AAC':'N', 'AAT':'N', 'AAA':'K', 'AAG':'K',
+        'AGC':'S', 'AGT':'S', 'AGA':'R', 'AGG':'R',
+        'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L',
+        'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
+        'CAC':'H', 'CAT':'H', 'CAA':'Q', 'CAG':'Q',
+        'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
+        'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V',
+        'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
+        'GAC':'D', 'GAT':'D', 'GAA':'E', 'GAG':'E',
+        'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
+        'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S',
+        'TTC':'F', 'TTT':'F', 'TTA':'L', 'TTG':'L',
+        'TAC':'Y', 'TAT':'Y', 'TAA':'*', 'TAG':'*',
+        'TGC':'C', 'TGT':'C', 'TGA':'*', 'TGG':'W'
+    }
+    
+    @classmethod
+    def process_dataframe(cls, df: pd.DataFrame, gencode: Dict[str, str] = None) -> pd.DataFrame:
+        """
+        Process the dataframe by consolidating non-standard codons.
+        
+        Args:
+            df (pd.DataFrame): Input dataframe of codon counts
+            gencode (Dict[str, str], optional): Custom genetic code dictionary
+        
+        Returns:
+            pd.DataFrame: Processed dataframe with non-standard codons consolidated
+        """
+        # Use default gencode if not provided
+        if gencode is None:
+            gencode = cls.DEFAULT_GENCODE
+        
+        # Create a copy to avoid modifying the original
+        df_processed = df.copy()
+        
+        # Identify rows that are not in gencode keys
+        non_gencode_rows = [idx for idx in df_processed.index 
+                             if idx not in gencode.keys() and idx != 'none']
+        
+        # If no non-standard codons, return the original dataframe
+        if not non_gencode_rows:
+            return df_processed
+        
+        # Calculate sum of counts for non-gencode rows
+        non_gencode_sum = df_processed.loc[non_gencode_rows].sum()
+        
+        # Add these counts to 'none' row if it exists, or create it
+        if 'none' in df_processed.index:
+            df_processed.loc['none'] += non_gencode_sum
+        else:
+            df_processed.loc['none'] = non_gencode_sum
+        
+        # Remove the non-gencode rows
+        df_processed = df_processed.drop(non_gencode_rows)
+        
+        return df_processed
+
+    @classmethod
+    def to_dataframe(cls, results: Dict[int, Counter], 
+                      oligos: List[str], 
+                      offset: int = 1, 
+                      gencode: Dict[str, str] = None) -> pd.DataFrame:
+        """
+        Convert results to a pandas DataFrame.
         
         Args:
             results: Dictionary of oligo index to codon counter
             oligos: List of oligo sequences
             offset: Value to add to oligo index in column names (default: 1)
+            gencode: Optional custom genetic code dictionary
             
         Returns:
             DataFrame with columns for each oligo and rows for each codon
         """
-        df_dict = {}
-        for i, oligo in enumerate(oligos):
-            col_name = f"{i + offset}_{oligo}"
-            col_data = results.get(i, Counter())
-            df_dict[col_name] = col_data
+        try:
+            df_dict = {}
+            for i, oligo in enumerate(oligos):
+                col_name = f"{i + offset}_{oligo}"
+                col_data = results.get(i, Counter())
+                df_dict[col_name] = col_data
+            
+            # Create DataFrame and fill missing values with 0
+            df = pd.DataFrame(df_dict).fillna(0)
+            
+            # Reorder columns based on oligo index
+            df = df.reindex(sorted(df.columns, key=lambda x: int(x.split('_')[0])), axis=1)
+
+            # Process dataframe with optional custom genetic code
+            df = cls.process_dataframe(df, gencode)
+            
+            return df
         
-        # Create DataFrame and fill missing values with 0
-        df = pd.DataFrame(df_dict).fillna(0)
-        
-        # Reorder columns based on oligo index
-        df = df.reindex(sorted(df.columns, key=lambda x: int(x.split('_')[0])), axis=1)
-        
-        return df
+        except Exception as e:
+            raise ValueError(f"Error converting results to DataFrame: {str(e)}")
     
-    @staticmethod
-    def summarize_results(df: pd.DataFrame) -> Dict:
-        """Generate a summary of the results.
+    @classmethod
+    def summarize_results(cls, df: pd.DataFrame) -> Dict[str, Any]:
+        """
+        Generate a summary of the results.
         
         Args:
             df: DataFrame containing oligo codon counts
@@ -63,10 +136,9 @@ class ResultsFormatter:
             
             summary[f"{col}_total_reads"] = total_reads
             summary[f"{col}_matched_reads"] = matched_reads
-            if total_reads > 0:
-                summary[f"{col}_match_rate"] = matched_reads / total_reads
-            else:
-                summary[f"{col}_match_rate"] = 0
+            
+            # Avoid division by zero
+            summary[f"{col}_match_rate"] = (matched_reads / total_reads) if total_reads > 0 else 0
                 
             # Top codons
             if matched_reads > 0:

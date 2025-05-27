@@ -1,3 +1,24 @@
+
+
+
+
+git create new repo project_folder
+git clone project_folder
+cd project_folder
+nbdev_new
+nbdev_prepare
+
+git add .
+git commit -m'Initial commit'
+git push
+
+gh-pages
+
+nbdev_install_hooks
+
+nbdev_export
+
+
 run nbdev_prepare before 
 git add .
 git commit -m'Initial commit'
