@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>OligoSeeker</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-fe8f458f31a467b51aeabd2275c1e88a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="OligoSeeker">
+<meta property="og:description" content="A Python tool for processing paired FASTQ files to efficiently count oligo codons.">
+<meta property="og:site_name" content="OligoSeeker">
+<meta name="twitter:title" content="OligoSeeker">
+<meta name="twitter:description" content="A Python tool for processing paired FASTQ files to efficiently count oligo codons.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">OligoSeeker</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">OligoSeeker</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">OligoSeeker</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fastq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">FASTQ Processing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Output</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pipeline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command-Line Interface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./merge.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Merge Module</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-python-library-for-processing-fastq-files-to-count-oligo-codons" id="toc-a-python-library-for-processing-fastq-files-to-count-oligo-codons" class="nav-link active" data-scroll-target="#a-python-library-for-processing-fastq-files-to-count-oligo-codons">A Python library for processing FASTQ files to count oligo codons</a></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#features" id="toc-features" class="nav-link" data-scroll-target="#features">Features</a></li>
+  <li><a href="#scientific-background-oligonucleotide-targeted-mutagenesis" id="toc-scientific-background-oligonucleotide-targeted-mutagenesis" class="nav-link" data-scroll-target="#scientific-background-oligonucleotide-targeted-mutagenesis">Scientific Background: Oligonucleotide-Targeted Mutagenesis</a>
+  <ul class="collapse">
+  <li><a href="#the-structure-of-mutagenic-oligos" id="toc-the-structure-of-mutagenic-oligos" class="nav-link" data-scroll-target="#the-structure-of-mutagenic-oligos">The Structure of Mutagenic Oligos</a></li>
+  <li><a href="#why-use-nnn-codons" id="toc-why-use-nnn-codons" class="nav-link" data-scroll-target="#why-use-nnn-codons">Why Use NNN Codons?</a></li>
+  <li><a href="#deep-sequencing-of-mutagenesis-libraries" id="toc-deep-sequencing-of-mutagenesis-libraries" class="nav-link" data-scroll-target="#deep-sequencing-of-mutagenesis-libraries">Deep Sequencing of Mutagenesis Libraries</a></li>
+  </ul></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works">How It Works</a></li>
+  <li><a href="#performance-and-compatibility" id="toc-performance-and-compatibility" class="nav-link" data-scroll-target="#performance-and-compatibility">Performance and Compatibility</a>
+  <ul class="collapse">
+  <li><a href="#scalability" id="toc-scalability" class="nav-link" data-scroll-target="#scalability">Scalability</a></li>
+  </ul></li>
+  <li><a href="#quick-start" id="toc-quick-start" class="nav-link" data-scroll-target="#quick-start">Quick Start</a>
+  <ul class="collapse">
+  <li><a href="#command-line-usage" id="toc-command-line-usage" class="nav-link" data-scroll-target="#command-line-usage">Command-Line Usage</a></li>
+  <li><a href="#python-api-usage" id="toc-python-api-usage" class="nav-link" data-scroll-target="#python-api-usage">Python API Usage</a></li>
+  <li><a href="#merging-count-files" id="toc-merging-count-files" class="nav-link" data-scroll-target="#merging-count-files">Merging Count Files</a></li>
+  </ul></li>
+  <li><a href="#modules" id="toc-modules" class="nav-link" data-scroll-target="#modules">Modules</a>
+  <ul class="collapse">
+  <li><a href="#core" id="toc-core" class="nav-link" data-scroll-target="#core">Core</a></li>
+  <li><a href="#fastq-processing" id="toc-fastq-processing" class="nav-link" data-scroll-target="#fastq-processing">FASTQ Processing</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output">Output</a></li>
+  <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a></li>
+  <li><a href="#merge" id="toc-merge" class="nav-link" data-scroll-target="#merge">Merge</a></li>
+  <li><a href="#cli" id="toc-cli" class="nav-link" data-scroll-target="#cli">CLI</a></li>
+  </ul></li>
+  <li><a href="#quick-start-1" id="toc-quick-start-1" class="nav-link" data-scroll-target="#quick-start-1">Quick Start</a>
+  <ul class="collapse">
+  <li><a href="#command-line-usage-1" id="toc-command-line-usage-1" class="nav-link" data-scroll-target="#command-line-usage-1">Command-Line Usage</a></li>
+  </ul></li>
+  <li><a href="#cli-reference" id="toc-cli-reference" class="nav-link" data-scroll-target="#cli-reference">CLI Reference</a></li>
+  <li><a href="#data-requirements" id="toc-data-requirements" class="nav-link" data-scroll-target="#data-requirements">Data Requirements</a></li>
+  <li><a href="#contributing" id="toc-contributing" class="nav-link" data-scroll-target="#contributing">Contributing</a>
+  <ul class="collapse">
+  <li><a href="#development-setup" id="toc-development-setup" class="nav-link" data-scroll-target="#development-setup">Development Setup</a></li>
+  </ul></li>
+  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/mtinti/OligoSeeker/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">OligoSeeker</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="a-python-library-for-processing-fastq-files-to-count-oligo-codons" class="level3">
+<h3 class="anchored" data-anchor-id="a-python-library-for-processing-fastq-files-to-count-oligo-codons">A Python library for processing FASTQ files to count oligo codons</h3>
+<blockquote class="blockquote">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://doi.org/10.5281/zenodo.15011916"><img src="https://zenodo.org/badge/946567115.svg" class="img-fluid figure-img"></a></p>
+<figcaption>DOI</figcaption>
+</figure>
+</div>
+</blockquote>
+</section>
+<section id="reference" class="level3">
+<h3 class="anchored" data-anchor-id="reference">Reference</h3>
+<blockquote class="blockquote">
+<p>https://mtinti.github.io/OligoSeeker/</p>
+</blockquote>
+</section>
+<section id="installation" class="level2">
+<h2 class="anchored" data-anchor-id="installation">Installation</h2>
+<p>You can install the package via pip:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install oligoseeker</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or directly from the repository:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install git+https://github.com/username/OligoSeeker.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>OligoSeeker is a Python library designed to process paired FASTQ files and count occurrences of specific oligo codons. It provides a simple yet powerful interface for bioinformatics researchers working with oligonucleotide analysis.</p>
+</section>
+<section id="features" class="level2">
+<h2 class="anchored" data-anchor-id="features">Features</h2>
+<ul>
+<li>Process paired FASTQ files (gzipped or uncompressed)</li>
+<li>Search for custom oligo sequences with codon sites (NNN)</li>
+<li>Support for both forward and reverse complement matching</li>
+<li>Comprehensive results in CSV format</li>
+<li>Merge functionality to combine results from multiple samples</li>
+<li>User-friendly command-line interface with multiple modes</li>
+<li>Modular design for integration with other tools</li>
+</ul>
+</section>
+<section id="scientific-background-oligonucleotide-targeted-mutagenesis" class="level2">
+<h2 class="anchored" data-anchor-id="scientific-background-oligonucleotide-targeted-mutagenesis">Scientific Background: Oligonucleotide-Targeted Mutagenesis</h2>
+<p>Oligonucleotide-targeted mutagenesis is a powerful technique in molecular biology that enables precise alterations of DNA sequences. In this approach, synthetic oligonucleotides (short DNA fragments, typically 20-60 nucleotides) are designed to target specific locations in a gene, allowing researchers to introduce defined mutations.</p>
+<section id="the-structure-of-mutagenic-oligos" class="level3">
+<h3 class="anchored" data-anchor-id="the-structure-of-mutagenic-oligos">The Structure of Mutagenic Oligos</h3>
+<p>A typical mutagenic oligo has three distinct components:</p>
+<ol type="1">
+<li><strong>5’ Homology Arm</strong>: A sequence that matches the target DNA upstream of the mutation site, providing specificity.</li>
+<li><strong>Mutation Site (NNN)</strong>: The actual mutation being introduced, often represented as “NNN” when a mixture of all possible codons is used.</li>
+<li><strong>3’ Homology Arm</strong>: A sequence that matches the target DNA downstream of the mutation site, providing additional specificity.</li>
+</ol>
+<p>For example, if our target DNA sequence is:</p>
+<pre><code>5'-ATGCATGCATGCATGCATGCATGCATGCATGC-3'</code></pre>
+<p>And we want to mutagenize the underlined codon:</p>
+<pre><code>5'-ATGCATGCATGCAT___GCATGCATGCATGCATGC-3'</code></pre>
+<p>We would design an oligo like:</p>
+<pre><code>5'-ATGCATGCATGCATNNNGCATGCATGCATGC-3'</code></pre>
+</section>
+<section id="why-use-nnn-codons" class="level3">
+<h3 class="anchored" data-anchor-id="why-use-nnn-codons">Why Use NNN Codons?</h3>
+<p>The “NNN” in the oligo represents a mixture of all possible nucleotide combinations at that position: - N = A mixture of A, T, G, and C - NNN = All 64 possible codons (4³ = 64)</p>
+<p>This approach allows: - <strong>Saturation mutagenesis</strong>: Testing all possible amino acid substitutions at a position - <strong>Structure-function studies</strong>: Identifying critical residues in proteins - <strong>Protein engineering</strong>: Optimizing enzyme activity or stability</p>
+</section>
+<section id="deep-sequencing-of-mutagenesis-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="deep-sequencing-of-mutagenesis-libraries">Deep Sequencing of Mutagenesis Libraries</h3>
+<p>After the mutagenesis reaction, the resulting DNA library contains a mixture of variants with different codons at the target position. Next-generation sequencing technologies allow researchers to sequence thousands or millions of these variants simultaneously.</p>
+<p><code>OligoSeeker</code> helps analyze this sequencing data by: 1. Identifying reads that contain the mutagenic oligo 2. Extracting the specific codon present at the NNN position 3. Counting the frequency of each codon variant</p>
+<p>This information is crucial for: - Verifying library coverage (were all possible codons incorporated?) - Quantifying biases in the mutagenesis process - Analyzing selection experiments where certain variants may be enriched</p>
+</section>
+</section>
+<section id="how-it-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-it-works">How It Works</h2>
+<p>OligoSeeker searches for specific oligonucleotide patterns in paired FASTQ reads. When it finds a match, it extracts the codon sequence (represented by NNN in the oligo pattern) and tallies its occurrence. The library handles both forward and reverse complement matching, ensuring comprehensive detection.</p>
+<p>The basic count workflow is: 1. Load and validate oligo sequences 2. Process paired FASTQ files 3. Count codon occurrences for each oligo 4. Output results in CSV format</p>
+<p>Additionally, the merge workflow allows you to: 1. Process multiple samples independently 2. Combine the count results from different runs 3. Sum the codon occurrences across samples 4. Analyze patterns across a larger dataset</p>
+</section>
+<section id="performance-and-compatibility" class="level2">
+<h2 class="anchored" data-anchor-id="performance-and-compatibility">Performance and Compatibility</h2>
+<p>OligoSeeker has been tested on both Linux and macOS platforms</p>
+<ul>
+<li><strong>Test Case</strong>: 1 oligo (33 bp) analyzed in 150 bp paired-end FASTQ files containing 300 million reads</li>
+<li><strong>Processing Time</strong>:
+<ul>
+<li>~1 hour on a high-performance compute cluster</li>
+<li>~1.5 hours on a standard MacBook Pro</li>
+</ul></li>
+</ul>
+<section id="scalability" class="level3">
+<h3 class="anchored" data-anchor-id="scalability">Scalability</h3>
+<p>For large datasets, we’ve implemented an efficient workflow to significantly increase throughput:</p>
+<ol type="1">
+<li><strong>File Splitting</strong>: Large FASTQ files are split into smaller chunks using <a href="https://bioinf.shenwei.me/seqkit/">seqkit</a>, a high-performance toolkit for FASTA/Q file manipulation</li>
+<li><strong>Parallel Processing</strong>: OligoSeeker is applied in parallel to each chunk independently</li>
+<li><strong>Result Merging</strong>: Individual results are merged using OligoSeeker’s built-in merge functionality</li>
+</ol>
+</section>
+</section>
+<section id="quick-start" class="level2">
+<h2 class="anchored" data-anchor-id="quick-start">Quick Start</h2>
+<section id="command-line-usage" class="level3">
+<h3 class="anchored" data-anchor-id="command-line-usage">Command-Line Usage</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic usage with oligos</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">!oligoseeker</span> <span class="at">-m</span> count <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>--f1 ../test_files/test_1.fq.gz <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>--f2 ../test_files/test_2.fq.gz <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>--oligos <span class="st">"GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT"</span> <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>--output ../test_files/test_outs <span class="at">--prefix</span> test_cm3</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic usage with oligos files</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">oligoseeker</span> <span class="at">-m</span> count <span class="dt">\</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>--f1 ../test_files/test_1.fq.gz <span class="dt">\</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>--f2 ../test_files/test_2.fq.gz <span class="dt">\</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>--oligos-file <span class="st">'../test_files/oligos.txt'</span> <span class="dt">\</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>--output ../test_files/test_outs <span class="at">--prefix</span> test_cm4</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic usage to merge oligo counts</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="ex">oligoseeker</span> <span class="at">-m</span> merge <span class="dt">\</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>--output-file <span class="st">'merge_cl.csv'</span> <span class="dt">\</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>--input-dir ../test_files/test_outs <span class="dt">\</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>--output ../test_files/merged </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="python-api-usage" class="level3">
+<h3 class="anchored" data-anchor-id="python-api-usage">Python API Usage</h3>
+<p>Here’s a simple example of using the Python API:</p>
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> OligoSeeker.pipeline <span class="im">import</span> PipelineConfig, OligoCodonPipeline</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Dict, List, Tuple, Set</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a configuration</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> PipelineConfig(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    fastq_1<span class="op">=</span><span class="st">"../test_files/test_1.fq.gz"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    fastq_2<span class="op">=</span><span class="st">"../test_files/test_1.fq.gz"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    oligos_list<span class="op">=</span>[<span class="st">"GCGGATTACATTNNNAAATAACATCGT"</span>, <span class="st">"TGTGGTAAGCGGNNNGAAAGCATTTGT"</span>, <span class="st">"GTCGTAGAAAATNNNTGGGTGATGAGC"</span>],</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    output_path<span class="op">=</span><span class="st">"../test_files/test_outs"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    output_prefix<span class="op">=</span><span class="st">'test1'</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create and run the pipeline</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> OligoCodonPipeline(config)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pipeline.run()</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the locations of output files</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Results saved to: </span><span class="sc">{</span>results[<span class="st">'csv_path'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/MTinti/miniconda3/envs/work3/lib/python3.10/site-packages/pandas/core/arrays/masked.py:60: UserWarning: Pandas requires version '1.3.6' or newer of 'bottleneck' (version '1.3.4' currently installed).
+  from pandas.core import (
+2025-03-12 15:10:00,869 - INFO - Starting OligoCodonPipeline
+2025-03-12 15:10:00,869 - INFO - Loading oligo sequences...
+2025-03-12 15:10:00,870 - INFO - Using provided oligo list
+2025-03-12 15:10:00,870 - INFO - Loaded 3 oligo sequences
+2025-03-12 15:10:00,871 - INFO - Processing FASTQ files...</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"8a83e3a9db44425abdd64a9263f38491","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2025-03-12 15:10:00,974 - INFO - Formatting results...
+2025-03-12 15:10:00,976 - INFO - Saving results to: ../test_files/test_outs/test1_counts.csv
+2025-03-12 15:10:01,000 - INFO - Pipeline completed in 0.13 seconds</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Results saved to: ../test_files/test_outs/test1_counts.csv</code></pre>
+</div>
+</div>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this should show 20 (ACT), 40 (GGC) and 60 matches (AAA) for</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># oligo 1, 2 and 3 respectievely</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> pd.read_csv(results[<span class="st">'csv_path'</span>],index_col<span class="op">=</span>[<span class="dv">0</span>])</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>out.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">1_GCGGATTACATTNNNAAATAACATCGT</th>
+<th data-quarto-table-cell-role="th">2_TGTGGTAAGCGGNNNGAAAGCATTTGT</th>
+<th data-quarto-table-cell-role="th">3_GTCGTAGAAAATNNNTGGGTGATGAGC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">none</td>
+<td>1980.0</td>
+<td>1960.0</td>
+<td>1940.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">ACT</td>
+<td>20.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">GGC</td>
+<td>0.0</td>
+<td>40.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">AAA</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>60.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Here’s a simple example of using the Python API with oligo listed in a file:</p>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> OligoSeeker.pipeline <span class="im">import</span> PipelineConfig, OligoCodonPipeline</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Dict, List, Tuple, Set</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a configuration</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> PipelineConfig(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    fastq_1<span class="op">=</span><span class="st">"../test_files/test_1.fq.gz"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    fastq_2<span class="op">=</span><span class="st">"../test_files/test_1.fq.gz"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    oligos_file<span class="op">=</span><span class="st">"../test_files/oligos.txt"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    output_path<span class="op">=</span><span class="st">"../test_files/test_outs"</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    output_prefix<span class="op">=</span><span class="st">'test2'</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create and run the pipeline</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> OligoCodonPipeline(config)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pipeline.run()</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the locations of output files</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Results saved to: </span><span class="sc">{</span>results[<span class="st">'csv_path'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2025-03-12 15:10:01,100 - INFO - Starting OligoCodonPipeline
+2025-03-12 15:10:01,101 - INFO - Loading oligo sequences...
+2025-03-12 15:10:01,101 - INFO - Loading oligos from file: ../test_files/oligos.txt
+2025-03-12 15:10:01,103 - INFO - Loaded 3 oligo sequences
+2025-03-12 15:10:01,103 - INFO - Processing FASTQ files...</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"8c8e9bedd22242c892384870eefae8fc","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2025-03-12 15:10:01,154 - INFO - Formatting results...
+2025-03-12 15:10:01,156 - INFO - Saving results to: ../test_files/test_outs/test2_counts.csv
+2025-03-12 15:10:01,160 - INFO - Pipeline completed in 0.06 seconds</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Results saved to: ../test_files/test_outs/test2_counts.csv</code></pre>
+</div>
+</div>
+</section>
+<section id="merging-count-files" class="level3">
+<h3 class="anchored" data-anchor-id="merging-count-files">Merging Count Files</h3>
+<p>You can merge multiple count files from different runs to combine results:</p>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> OligoSeeker.merge <span class="im">import</span> merge_count_csvs</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all count files in a directory</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>merged_df <span class="op">=</span> merge_count_csvs(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    input_dir<span class="op">=</span><span class="st">"../test_files/test_outs"</span>,  <span class="co"># Directory containing count files</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    output_file<span class="op">=</span><span class="st">"merged_counts.csv"</span>,      <span class="co"># Output filename</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    output_dir<span class="op">=</span><span class="st">"../test_files/merged"</span>,    <span class="co"># Output directory</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    pattern<span class="op">=</span><span class="st">"*_counts.csv"</span>                <span class="co"># Pattern to match files</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Merged </span><span class="sc">{</span><span class="bu">len</span>(merged_df)<span class="sc">}</span><span class="ss"> codons across </span><span class="sc">{</span><span class="bu">len</span>(merged_df.columns)<span class="sc">}</span><span class="ss"> oligos"</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>merged_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Found 4 CSV files to merge
+  Loaded ../test_files/test_outs/test2_counts.csv with 4 rows and 3 columns
+  Loaded ../test_files/test_outs/test1_counts.csv with 4 rows and 3 columns
+  Loaded ../test_files/test_outs/test_cm3_counts.csv with 4 rows and 3 columns
+  Loaded ../test_files/test_outs/test_cm4_counts.csv with 4 rows and 3 columns
+Merged data saved to ../test_files/merged/merged_counts.csv
+Merged 4 codons across 3 oligos</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">1_GCGGATTACATTNNNAAATAACATCGT</th>
+<th data-quarto-table-cell-role="th">2_TGTGGTAAGCGGNNNGAAAGCATTTGT</th>
+<th data-quarto-table-cell-role="th">3_GTCGTAGAAAATNNNTGGGTGATGAGC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">AAA</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>240.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">ACT</td>
+<td>80.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">GGC</td>
+<td>0.0</td>
+<td>160.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">none</td>
+<td>7920.0</td>
+<td>7840.0</td>
+<td>7760.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="modules" class="level2">
+<h2 class="anchored" data-anchor-id="modules">Modules</h2>
+<p>OligoSeeker is organized into several modules:</p>
+<section id="core" class="level3">
+<h3 class="anchored" data-anchor-id="core">Core</h3>
+<p>The <a href="./core.html">core module</a> contains fundamental utilities and classes: - DNA sequence operations (reverse complement, etc.) - OligoRegex for pattern matching - OligoLoader for loading and validating oligo sequences</p>
+</section>
+<section id="fastq-processing" class="level3">
+<h3 class="anchored" data-anchor-id="fastq-processing">FASTQ Processing</h3>
+<p>The <a href="./fastq.html">FASTQ module</a> handles reading and processing FASTQ files: - FastqHandler for file operations - OligoCodonProcessor for counting codons in FASTQ files</p>
+</section>
+<section id="output" class="level3">
+<h3 class="anchored" data-anchor-id="output">Output</h3>
+<p>The <a href="./output.html">output module</a> manages results formatting and saving: - ResultsFormatter for converting results to DataFrames - ResultsSaver for saving to various file formats</p>
+</section>
+<section id="pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="pipeline">Pipeline</h3>
+<p>The <a href="./pipeline.html">pipeline module</a> provides the complete processing pipeline: - PipelineConfig for configuration settings - ProgressReporter for progress tracking - OligoCodonPipeline for end-to-end processing</p>
+</section>
+<section id="merge" class="level3">
+<h3 class="anchored" data-anchor-id="merge">Merge</h3>
+<p>The <a href="./merge.html">merge module</a> provides functionality to combine multiple count results: - Merge count CSV files by summing values - Support for flexible output naming and location - Pattern matching to select specific files</p>
+</section>
+<section id="cli" class="level3">
+<h3 class="anchored" data-anchor-id="cli">CLI</h3>
+<p>The <a href="./cli.html">CLI module</a> implements the command-line interface: - Argument parsing - Configuration validation - Pipeline execution</p>
+</section>
+</section>
+<section id="quick-start-1" class="level2">
+<h2 class="anchored" data-anchor-id="quick-start-1">Quick Start</h2>
+<section id="command-line-usage-1" class="level3">
+<h3 class="anchored" data-anchor-id="command-line-usage-1">Command-Line Usage</h3>
+<p>For count mode (processing FASTQ files):</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using oligos directly specified</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">oligoseeker</span> <span class="at">-m</span> count <span class="at">--f1</span> test_files/test_1.fq.gz <span class="at">--f2</span> test_files/test_2.fq.gz <span class="dt">\</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>--oligos <span class="st">"GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT"</span> <span class="dt">\</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>--output test_outs <span class="at">--prefix</span> test_run1</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Using oligos from a file</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">oligoseeker</span> <span class="at">-m</span> count <span class="at">--f1</span> test_files/test_1.fq.gz <span class="at">--f2</span> test_files/test_2.fq.gz <span class="dt">\</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>--oligos-file test_files/oligos.txt <span class="at">--output</span> test_outs <span class="at">--prefix</span> test_run2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For merge mode (combining multiple count files):</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all count files in a directory</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">oligoseeker</span> <span class="at">-m</span> merge <span class="at">--input-dir</span> test_outs <span class="at">--output</span> test_outs/merged <span class="dt">\</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>--output-file combined_counts.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="cli-reference" class="level2">
+<h2 class="anchored" data-anchor-id="cli-reference">CLI Reference</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">usage:</span> oligoseeker <span class="pp">[-</span><span class="ss">h</span><span class="pp">]</span> [-m <span class="dt">{count</span><span class="op">,</span><span class="dt">merge}</span>] [--f1 FASTQ_PATH_1] [--f2 FASTQ_PATH_2]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">[--oligos-file</span> OLIGOS_FILE] [--oligos OLIGOS_STRING]</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">[--offset</span> OFFSET_OLIGO] [--input-dir INPUT_DIR]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">[--output-file</span> OUTPUT_FILE] [--pattern PATTERN]</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">[-o</span> OUTPUT_PATH] [--prefix OUTPUT_PREFIX]</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">[--log-file</span> LOG_FILE]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">[--log-level</span> <span class="dt">{DEBUG</span><span class="op">,</span><span class="dt">INFO</span><span class="op">,</span><span class="dt">WARNING</span><span class="op">,</span><span class="dt">ERROR</span><span class="op">,</span><span class="dt">CRITICAL}</span>]</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="ex">OligoSeeker:</span> Process FASTQ files to count oligo codons</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="ex">options:</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-h,</span> <span class="at">--help</span>            show this help message and exit</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-m</span> <span class="dt">{count</span><span class="op">,</span><span class="dt">merge}</span>, <span class="at">--mode</span> <span class="dt">{count</span><span class="op">,</span><span class="dt">merge}</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Operation</span> mode: <span class="st">'count'</span> to process FASTQ files or <span class="st">'merge'</span> to combine CSV counts <span class="er">(</span><span class="ex">default:</span> count<span class="kw">)</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-o</span> OUTPUT_PATH, <span class="at">--output</span> OUTPUT_PATH</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Output</span> directory for results <span class="er">(</span><span class="ex">default:</span> ../test_files/test_outs<span class="kw">)</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--prefix</span> OUTPUT_PREFIX</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Prefix</span> for output files <span class="er">(</span><span class="ex">default:</span> <span class="kw">)</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--log-file</span> LOG_FILE   Path to log file <span class="er">(</span><span class="cf">if</span> <span class="ex">not</span> specified, logs to console only<span class="kw">)</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--log-level</span> <span class="dt">{DEBUG</span><span class="op">,</span><span class="dt">INFO</span><span class="op">,</span><span class="dt">WARNING</span><span class="op">,</span><span class="dt">ERROR</span><span class="op">,</span><span class="dt">CRITICAL}</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Logging</span> level <span class="er">(</span><span class="ex">default:</span> INFO<span class="kw">)</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="ex">Count</span> Mode Options:</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--f1</span> FASTQ_PATH_1, <span class="at">--fastq_1</span> FASTQ_PATH_1</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Path</span> to FASTQ 1 file <span class="er">(</span><span class="ex">default:</span> ../test_fastq_files/test_1.fq.gz<span class="kw">)</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--f2</span> FASTQ_PATH_2, <span class="at">--fastq_2</span> FASTQ_PATH_2</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Path</span> to FASTQ 2 file <span class="er">(</span><span class="ex">default:</span> ../test_fastq_files/test_2.fq.gz<span class="kw">)</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="ex">Oligo</span> Source Options:</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--oligos-file</span> OLIGOS_FILE</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">File</span> containing oligo sequences <span class="er">(</span><span class="ex">one</span> per line<span class="kw">)</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--oligos</span> OLIGOS_STRING</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Comma-separated</span> list of oligo sequences</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">(</span><span class="ex">default:</span> GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT,GTCGTAGAAAATNNNTGGGTGATGAGC<span class="kw">)</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--offset</span> OFFSET_OLIGO</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Value</span> to add to oligo index in output <span class="er">(</span><span class="ex">default:</span> 1<span class="kw">)</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="ex">Merge</span> Mode Options:</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--input-dir</span> INPUT_DIR</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Directory</span> containing CSV files to merge <span class="er">(</span><span class="ex">required</span> for merge mode<span class="kw">)</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--output-file</span> OUTPUT_FILE</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>                        <span class="ex">Name</span> of the output merged file <span class="er">(</span><span class="ex">default:</span> merged_counts.csv<span class="kw">)</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--pattern</span> PATTERN     Pattern to match CSV files <span class="er">(</span><span class="ex">default:</span> <span class="pp">*</span>count<span class="pp">*</span>.csv<span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="data-requirements" class="level2">
+<h2 class="anchored" data-anchor-id="data-requirements">Data Requirements</h2>
+<p>OligoSeeker works with standard paired FASTQ files, which should be named according to common conventions:</p>
+<ul>
+<li>Read 1: <code>*_1.fq.gz</code>, <code>*_R1.fastq.gz</code>, or <code>*_R1_001.fastq.gz</code></li>
+<li>Read 2: <code>*_2.fq.gz</code>, <code>*_R2.fastq.gz</code>, or <code>*_R2_001.fastq.gz</code></li>
+</ul>
+<p>The oligo sequences should include a codon site marked with <code>NNN</code>. For example:</p>
+<pre><code>GAACNNNCAT
+TGACNNNTAG</code></pre>
+<p>This specifies that the 3 bases following <code>GAAC</code> or <code>TGAC</code> should be captured as the codon.</p>
+</section>
+<section id="contributing" class="level2">
+<h2 class="anchored" data-anchor-id="contributing">Contributing</h2>
+<p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+<section id="development-setup" class="level3">
+<h3 class="anchored" data-anchor-id="development-setup">Development Setup</h3>
+<ol type="1">
+<li><p>Clone the repository</p></li>
+<li><p>Install development dependencies:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-e</span> <span class="st">".[dev]"</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install nbdev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Make changes to the notebook files in the <code>nbs</code> directory</p></li>
+<li><p>Build the library:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nbdev_build_lib</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Build the documentation:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nbdev_build_docs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+</section>
+<section id="license" class="level2">
+<h2 class="anchored" data-anchor-id="license">License</h2>
+<p>This project is licensed under the Apache 2.0 License - see the LICENSE file for details.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mtinti\.github\.io\/OligoSeeker");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/mtinti/OligoSeeker/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

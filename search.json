@@ -1,0 +1,322 @@
+[
+  {
+    "objectID": "output.html",
+    "href": "output.html",
+    "title": "Output",
+    "section": "",
+    "text": "source\n\n\n\n ResultsFormatter ()\n\nFormats oligo codon counting results for output.",
+    "crumbs": [
+      "Output"
+    ]
+  },
+  {
+    "objectID": "output.html#results-formatter",
+    "href": "output.html#results-formatter",
+    "title": "Output",
+    "section": "",
+    "text": "source\n\n\n\n ResultsFormatter ()\n\nFormats oligo codon counting results for output.",
+    "crumbs": [
+      "Output"
+    ]
+  },
+  {
+    "objectID": "output.html#results-saver",
+    "href": "output.html#results-saver",
+    "title": "Output",
+    "section": "Results Saver",
+    "text": "Results Saver\n\nsource\n\nResultsSaver\n\n ResultsSaver ()\n\nSaves processing results to files.",
+    "crumbs": [
+      "Output"
+    ]
+  },
+  {
+    "objectID": "cli.html",
+    "href": "cli.html",
+    "title": "Command-Line Interface",
+    "section": "",
+    "text": "source\n\n\n\n create_parser ()\n\n*Create command-line argument parser.\nReturns: Configured argument parser*",
+    "crumbs": [
+      "Command-Line Interface"
+    ]
+  },
+  {
+    "objectID": "cli.html#argument-parser",
+    "href": "cli.html#argument-parser",
+    "title": "Command-Line Interface",
+    "section": "",
+    "text": "source\n\n\n\n create_parser ()\n\n*Create command-line argument parser.\nReturns: Configured argument parser*",
+    "crumbs": [
+      "Command-Line Interface"
+    ]
+  },
+  {
+    "objectID": "cli.html#command-line-runner",
+    "href": "cli.html#command-line-runner",
+    "title": "Command-Line Interface",
+    "section": "Command-Line Runner",
+    "text": "Command-Line Runner\n\nsource\n\nvalidate_args\n\n validate_args (args:argparse.Namespace)\n\n*Validate command-line arguments.\nArgs: args: Parsed command-line arguments\nReturns: True if arguments are valid, False otherwise*\n\nsource\n\n\nargs_to_config\n\n args_to_config (args:argparse.Namespace)\n\n*Convert command-line arguments to pipeline configuration.\nArgs: args: Parsed command-line arguments\nReturns: Pipeline configuration object*\n\nsource\n\n\nrun_cli\n\n run_cli (args:Optional[List[str]]=None)\n\n*Run the command-line interface.\nArgs: args: Command-line arguments (if None, uses sys.argv)\nReturns: Exit code (0 for success, non-zero for failure)*\n\nsource\n\n\nmain\n\n main ()\n\nMain entry point for command-line execution.\n\n!oligoseeker -m count \\\n--f1 ../test_files/test_1.fq.gz \\\n--f2 ../test_files/test_2.fq.gz \\\n--oligos \"GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT,GTCGTAGAAAATNNNTGGGTGATGAGC\" \\\n--output ../test_files/test_outs --prefix test_cm3\n\n/Users/MTinti/miniconda3/envs/work3/lib/python3.10/site-packages/pandas/core/arrays/masked.py:60: UserWarning: Pandas requires version '1.3.6' or newer of 'bottleneck' (version '1.3.4' currently installed).\n  from pandas.core import (\n2025-03-17 16:53:47,770 - INFO - Starting OligoCodonPipeline\n2025-03-17 16:53:47,770 - INFO - Loading oligo sequences...\n2025-03-17 16:53:47,770 - INFO - Loading oligos from provided string\n2025-03-17 16:53:47,770 - INFO - Loaded 3 oligo sequences\n2025-03-17 16:53:47,770 - INFO - Processing FASTQ files...\n2000it [00:00, 57245.66it/s]\n2025-03-17 16:53:47,839 - INFO - Formatting results...\n2025-03-17 16:53:47,841 - INFO - Saving results to: ../test_files/test_outs/test_cm3_counts.csv\n2025-03-17 16:53:47,847 - INFO - Pipeline completed in 0.08 seconds\n\nResults saved to:\n  CSV: ../test_files/test_outs/test_cm3_counts.csv\n\nProcessed 3 oligos in 0.08 seconds\n\n\n\n!oligoseeker -m count \\\n--f1 ../test_files/test_1.fq.gz \\\n--f2 ../test_files/test_2.fq.gz \\\n--oligos-file '../test_files/oligos.txt' \\\n--output ../test_files/test_outs --prefix test_cm4\n\n/Users/MTinti/miniconda3/envs/work3/lib/python3.10/site-packages/pandas/core/arrays/masked.py:60: UserWarning: Pandas requires version '1.3.6' or newer of 'bottleneck' (version '1.3.4' currently installed).\n  from pandas.core import (\n2025-03-11 20:03:03,960 - INFO - Starting OligoCodonPipeline\n2025-03-11 20:03:03,961 - INFO - Loading oligo sequences...\n2025-03-11 20:03:03,961 - INFO - Loading oligos from file: ../test_files/oligos.txt\n2025-03-11 20:03:03,961 - INFO - Loaded 3 oligo sequences\n2025-03-11 20:03:03,961 - INFO - Processing FASTQ files...\n2000it [00:00, 60738.60it/s]\n2025-03-11 20:03:04,009 - INFO - Formatting results...\n2025-03-11 20:03:04,011 - INFO - Saving results to: ../test_files/test_outs/test_cm4_counts.csv\n2025-03-11 20:03:04,017 - INFO - Pipeline completed in 0.06 seconds\n\nResults saved to:\n  CSV: ../test_files/test_outs/test_cm4_counts.csv\n\nProcessed 3 oligos in 0.06 seconds\n\n\n\n!oligoseeker -m merge \\\n--output-file 'merge_cl.csv' \\\n--input-dir ../test_files/test_outs \\\n--output ../test_files/merged\n\n/Users/MTinti/miniconda3/envs/work3/lib/python3.10/site-packages/pandas/core/arrays/masked.py:60: UserWarning: Pandas requires version '1.3.6' or newer of 'bottleneck' (version '1.3.4' currently installed).\n  from pandas.core import (\nFound 4 CSV files to merge\n  Loaded ../test_files/test_outs/test2_counts.csv with 4 rows and 3 columns\n  Loaded ../test_files/test_outs/test1_counts.csv with 4 rows and 3 columns\n  Loaded ../test_files/test_outs/test_cm3_counts.csv with 3 rows and 2 columns\n  Loaded ../test_files/test_outs/test_cm4_counts.csv with 4 rows and 3 columns\nMerged data saved to ../test_files/merged/merge_cl.csv\n\nMerge completed successfully!\nMerged 4 unique codons across all input files\nResults contain 3 oligo columns",
+    "crumbs": [
+      "Command-Line Interface"
+    ]
+  },
+  {
+    "objectID": "merge.html",
+    "href": "merge.html",
+    "title": "Merge Module",
+    "section": "",
+    "text": "source\n\n\n\n merge_count_csvs (input_dir:str, output_file:str=None,\n                   output_dir:str=None, pattern:str='*count*.csv')\n\n*Merge multiple count CSV files by summing values.\nArgs: input_dir: Directory containing count CSV files output_file: Path to save the merged CSV (if full path provided) output_dir: Directory to save the output (if output_file is just a filename) pattern: Glob pattern to match count files (default: “count.csv”)\nReturns: DataFrame with merged counts*",
+    "crumbs": [
+      "Merge Module"
+    ]
+  },
+  {
+    "objectID": "merge.html#csv-merger",
+    "href": "merge.html#csv-merger",
+    "title": "Merge Module",
+    "section": "",
+    "text": "source\n\n\n\n merge_count_csvs (input_dir:str, output_file:str=None,\n                   output_dir:str=None, pattern:str='*count*.csv')\n\n*Merge multiple count CSV files by summing values.\nArgs: input_dir: Directory containing count CSV files output_file: Path to save the merged CSV (if full path provided) output_dir: Directory to save the output (if output_file is just a filename) pattern: Glob pattern to match count files (default: “count.csv”)\nReturns: DataFrame with merged counts*",
+    "crumbs": [
+      "Merge Module"
+    ]
+  },
+  {
+    "objectID": "core.html#dna-utilities",
+    "href": "core.html#dna-utilities",
+    "title": "Core",
+    "section": "DNA Utilities",
+    "text": "DNA Utilities\n\nsource\n\nDNAUtils\n\n DNAUtils ()\n\nUtility class for DNA sequence operations.",
+    "crumbs": [
+      "Core"
+    ]
+  },
+  {
+    "objectID": "core.html#oligo-regular-expression-matching",
+    "href": "core.html#oligo-regular-expression-matching",
+    "title": "Core",
+    "section": "Oligo Regular Expression Matching",
+    "text": "Oligo Regular Expression Matching\n\nsource\n\nOligoRegex\n\n OligoRegex (oligo:str)\n\nCompiles and manages regex patterns for oligo searching.\n\n# Example oligo design for targeting position 42 in a gene\noligo_template = \"GAACGTTATCCGCGTNNNACGTTCGAAGCTGGT\"\n#                 ^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^\n#                 5' targeting     |   3' targeting\n#                                 codon\n\n# Create the regex pattern for finding this oligo in sequencing data\noligo_regex = OligoRegex(oligo_template)\n\n# Example sequencing read pairs\nread1 = \"ATCGAACGTTATCCGCGTATGACGTTCGAAGCTGGTCG\"\n#                          ^^^\n#                          codon = ATG (Met)\nread2 = \"CGATCGGTTCGAACGTCTTCACAGCATTG\"\n\n# Find the codon\nfound_codon = oligo_regex.find_codon(read1, read2)\nprint(f\"Found codon: {found_codon}\")  # Should print \"ATG\"\n\n# Translate to amino acid\namino_acid = str(Seq(found_codon).translate())\nprint(f\"Amino acid: {amino_acid}\")\n\nFound codon: ATG\nAmino acid: M\n\n\n\ndef test_oligo_regex():\n    \"\"\"Test the OligoRegex class for finding codons in reads.\"\"\"\n    \n    # Test 1: Basic functionality with forward match\n    oligo = \"GAACNNNCAT\"\n    regex = OligoRegex(oligo)\n    read1 = \"ACGTGAACATGCATTGC\"  # Contains GAACATGCAT with ATG as the codon\n    read2 = \"GCAACTGTAGCGTACGT\"  # No match\n    \n    codon = regex.find_codon(read1, read2)\n    print(f\"Test 1: Forward match - Oligo: {oligo}, Codon found: {codon}\")\n    expected = \"ATG\"\n    if codon == expected:\n        print(f\"✓ Correctly found codon {expected} in forward direction\")\n    else:\n        print(f\"✗ Expected {expected}, got {codon}\")\n    \n    # Test 2: Match in second read\n    oligo = \"GAACNNNCAT\"\n    regex = OligoRegex(oligo)\n    read1 = \"ACGTCGATCGATCG\"  # No match\n    read2 = \"ACGTGAACCGGCATCG\"  # Contains GAACCGGCAT with CGG as the codon\n    \n    codon = regex.find_codon(read1, read2)\n    print(f\"Test 2: Match in second read - Oligo: {oligo}, Codon found: {codon}\")\n    expected = \"CGG\"\n    if codon == expected:\n        print(f\"✓ Correctly found codon {expected} in second read\")\n    else:\n        print(f\"✗ Expected {expected}, got {codon}\")\n    \n    # Test 3: Reverse complement match\n    oligo = \"GAACNNNCAT\"\n    regex = OligoRegex(oligo)\n    rev_comp = DNAUtils.reverse_complement(oligo.replace(\"NNN\", \"GTC\"))  # ATGGTCGTTC\n    read1 = \"ACGTATGGTCGTTCGCA\"  # Contains reverse complement with GTC as codon\n    read2 = \"GCAACTGTAGCGTACGT\"  # No match\n    \n    codon = regex.find_codon(read1, read2)\n    print(f\"Test 3: Reverse complement match - Oligo: {oligo}, Codon found: {codon}\")\n    expected = \"GAC\"  # Reverse complement of GTC\n    if codon == expected:\n        print(f\"✓ Correctly found reverse complement codon {expected}\")\n    else:\n        print(f\"✗ Expected {expected}, got {codon}\")\n        \n    # Test 5: No match\n    oligo = \"GAACNNNCAT\"\n    regex = OligoRegex(oligo)\n    read1 = \"ACGTCGATCGATCG\"  # No match\n    read2 = \"GCAACTGTAGCGTACGT\"  # No match\n    \n    codon = regex.find_codon(read1, read2)\n    print(f\"Test 5: No match - Oligo: {oligo}, Result: {codon}\")\n    if codon == \"none\":\n        print(\"✓ Correctly returned 'none' for no match\")\n    else:\n        print(f\"✗ Expected 'none', got {codon}\")\n\n# Run the tests\ntest_oligo_regex()\n\nTest 1: Forward match - Oligo: GAACNNNCAT, Codon found: ATG\n✓ Correctly found codon ATG in forward direction\nTest 2: Match in second read - Oligo: GAACNNNCAT, Codon found: CGG\n✓ Correctly found codon CGG in second read\nTest 3: Reverse complement match - Oligo: GAACNNNCAT, Codon found: GAC\n✓ Correctly found reverse complement codon GAC\nTest 5: No match - Oligo: GAACNNNCAT, Result: none\n✓ Correctly returned 'none' for no match",
+    "crumbs": [
+      "Core"
+    ]
+  },
+  {
+    "objectID": "core.html#oligo-loading-and-validation",
+    "href": "core.html#oligo-loading-and-validation",
+    "title": "Core",
+    "section": "Oligo Loading and Validation",
+    "text": "Oligo Loading and Validation\n\nsource\n\nOligoLoader\n\n OligoLoader ()\n\nLoads and validates oligo sequences from different sources.\n\ndef test_oligo_loader_single_oligo_validation():\n    \"\"\"Test OligoLoader validation with a single oligo per test.\"\"\"\n   \n    # Test 1: Valid oligo with one NNN pattern\n    try:\n        OligoLoader.validate_oligos([\"GCGGATTACATTNNNAAATAACATCGT\"])\n        print(\"✓ Valid oligo with one NNN passed validation\")\n    except ValueError as e:\n        print(f\"✗ Valid oligo failed validation: {str(e)}\")\n    \n    # Test 2: Oligo with no NNN pattern\n    try:\n        OligoLoader.validate_oligos([\"GCGGATTACATTGCTAAATAACATCGT\"])\n        print(\"✗ Failed to detect missing NNN pattern\")\n    except ValueError as e:\n        print(f\"✓ Correctly detected missing NNN pattern: {str(e)}\")\n    \n    # Test 3: Oligo with multiple NNN patterns\n    try:\n        OligoLoader.validate_oligos([\"GCGGATTACATTNNNAAATAACNNNGT\"])\n        print(\"✗ Failed to detect multiple NNN patterns\")\n    except ValueError as e:\n        print(f\"✓ Correctly detected multiple NNN patterns: {str(e)}\")\n    \n    # Test 4: Oligo with incorrect NNN format (NN instead of NNN)\n    try:\n        OligoLoader.validate_oligos([\"TGACNNTAG\"])\n        print(\"✗ Failed to detect incorrect NN format\")\n    except ValueError as e:\n        print(f\"✓ Correctly detected incorrect NN format: {str(e)}\")\n    \n    # Test 5: Oligo with invalid characters\n    try:\n        OligoLoader.validate_oligos([\"TGACNNNXYZ\"])\n        print(\"✗ Failed to detect invalid characters\")\n    except ValueError as e:\n        print(f\"✓ Correctly detected invalid characters: {str(e)}\")\n    \n    print(\"\\nSingle oligo validation tests completed\")\n\n# Run the tests\ntest_oligo_loader_single_oligo_validation()\n\n✓ Valid oligo with one NNN passed validation\n✓ Correctly detected missing NNN pattern: GCGGATTACATTGCTAAATAACATCGT (contains 0 NNN patterns, must have exactly 1)\n✓ Correctly detected multiple NNN patterns: GCGGATTACATTNNNAAATAACNNNGT (contains 2 NNN patterns, must have exactly 1)\n✓ Correctly detected incorrect NN format: TGACNNTAG (contains 0 NNN patterns, must have exactly 1)\n✓ Correctly detected invalid characters: Invalid characters found in oligos: X,Z,Y\n\nSingle oligo validation tests completed\n\n\n\n#OligoLoader.validate_oligos([\"GCGGATTACATTGCTAAATAACATCGT\"])",
+    "crumbs": [
+      "Core"
+    ]
+  },
+  {
+    "objectID": "pipeline.html",
+    "href": "pipeline.html",
+    "title": "Pipeline",
+    "section": "",
+    "text": "source\n\n\n\n PipelineConfig (fastq_1:str='../test_files/test_1.fq.gz',\n                 fastq_2:str='../test_files/test_2.fq.gz',\n                 oligos_file:Optional[str]=None,\n                 oligos_string:Optional[str]=None,\n                 oligos_list:Optional[List[str]]=None,\n                 output_path:str='../test_files/test_outs',\n                 output_prefix:str='', offset_oligo:int=1,\n                 log_file:Optional[str]=None, log_level:int=20)\n\nConfiguration settings for oligo codon counting pipeline.",
+    "crumbs": [
+      "Pipeline"
+    ]
+  },
+  {
+    "objectID": "pipeline.html#pipeline-configuration",
+    "href": "pipeline.html#pipeline-configuration",
+    "title": "Pipeline",
+    "section": "",
+    "text": "source\n\n\n\n PipelineConfig (fastq_1:str='../test_files/test_1.fq.gz',\n                 fastq_2:str='../test_files/test_2.fq.gz',\n                 oligos_file:Optional[str]=None,\n                 oligos_string:Optional[str]=None,\n                 oligos_list:Optional[List[str]]=None,\n                 output_path:str='../test_files/test_outs',\n                 output_prefix:str='', offset_oligo:int=1,\n                 log_file:Optional[str]=None, log_level:int=20)\n\nConfiguration settings for oligo codon counting pipeline.",
+    "crumbs": [
+      "Pipeline"
+    ]
+  },
+  {
+    "objectID": "pipeline.html#progress-reporting",
+    "href": "pipeline.html#progress-reporting",
+    "title": "Pipeline",
+    "section": "Progress Reporting",
+    "text": "Progress Reporting\n\nsource\n\nProgressReporter\n\n ProgressReporter (logger:Optional[logging.Logger]=None)\n\nReports progress during long-running operations.",
+    "crumbs": [
+      "Pipeline"
+    ]
+  },
+  {
+    "objectID": "pipeline.html#oligo-codon-pipeline",
+    "href": "pipeline.html#oligo-codon-pipeline",
+    "title": "Pipeline",
+    "section": "Oligo Codon Pipeline",
+    "text": "Oligo Codon Pipeline\n\nsource\n\nOligoCodonPipeline\n\n OligoCodonPipeline (config:__main__.PipelineConfig)\n\nComplete pipeline for oligo codon counting.",
+    "crumbs": [
+      "Pipeline"
+    ]
+  },
+  {
+    "objectID": "fastq.html",
+    "href": "fastq.html",
+    "title": "FASTQ Processing",
+    "section": "",
+    "text": "source\n\n\n\n FastqHandler ()\n\nHandles FASTQ file operations.",
+    "crumbs": [
+      "FASTQ Processing"
+    ]
+  },
+  {
+    "objectID": "fastq.html#fastq-file-handling",
+    "href": "fastq.html#fastq-file-handling",
+    "title": "FASTQ Processing",
+    "section": "",
+    "text": "source\n\n\n\n FastqHandler ()\n\nHandles FASTQ file operations.",
+    "crumbs": [
+      "FASTQ Processing"
+    ]
+  },
+  {
+    "objectID": "fastq.html#oligo-codon-processor",
+    "href": "fastq.html#oligo-codon-processor",
+    "title": "FASTQ Processing",
+    "section": "Oligo Codon Processor",
+    "text": "Oligo Codon Processor\n\nsource\n\nOligoCodonProcessor\n\n OligoCodonProcessor (oligos:List[str])\n\nProcesses FASTQ files to count oligo codons.",
+    "crumbs": [
+      "FASTQ Processing"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "OligoSeeker",
+    "section": "",
+    "text": "DOI",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "OligoSeeker",
+    "section": "Installation",
+    "text": "Installation\nYou can install the package via pip:\npip install oligoseeker\nOr directly from the repository:\npip install git+https://github.com/username/OligoSeeker.git",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#overview",
+    "href": "index.html#overview",
+    "title": "OligoSeeker",
+    "section": "Overview",
+    "text": "Overview\nOligoSeeker is a Python library designed to process paired FASTQ files and count occurrences of specific oligo codons. It provides a simple yet powerful interface for bioinformatics researchers working with oligonucleotide analysis.",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#features",
+    "href": "index.html#features",
+    "title": "OligoSeeker",
+    "section": "Features",
+    "text": "Features\n\nProcess paired FASTQ files (gzipped or uncompressed)\nSearch for custom oligo sequences with codon sites (NNN)\nSupport for both forward and reverse complement matching\nComprehensive results in CSV format\nMerge functionality to combine results from multiple samples\nUser-friendly command-line interface with multiple modes\nModular design for integration with other tools",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#scientific-background-oligonucleotide-targeted-mutagenesis",
+    "href": "index.html#scientific-background-oligonucleotide-targeted-mutagenesis",
+    "title": "OligoSeeker",
+    "section": "Scientific Background: Oligonucleotide-Targeted Mutagenesis",
+    "text": "Scientific Background: Oligonucleotide-Targeted Mutagenesis\nOligonucleotide-targeted mutagenesis is a powerful technique in molecular biology that enables precise alterations of DNA sequences. In this approach, synthetic oligonucleotides (short DNA fragments, typically 20-60 nucleotides) are designed to target specific locations in a gene, allowing researchers to introduce defined mutations.\n\nThe Structure of Mutagenic Oligos\nA typical mutagenic oligo has three distinct components:\n\n5’ Homology Arm: A sequence that matches the target DNA upstream of the mutation site, providing specificity.\nMutation Site (NNN): The actual mutation being introduced, often represented as “NNN” when a mixture of all possible codons is used.\n3’ Homology Arm: A sequence that matches the target DNA downstream of the mutation site, providing additional specificity.\n\nFor example, if our target DNA sequence is:\n5'-ATGCATGCATGCATGCATGCATGCATGCATGC-3'\nAnd we want to mutagenize the underlined codon:\n5'-ATGCATGCATGCAT___GCATGCATGCATGCATGC-3'\nWe would design an oligo like:\n5'-ATGCATGCATGCATNNNGCATGCATGCATGC-3'\n\n\nWhy Use NNN Codons?\nThe “NNN” in the oligo represents a mixture of all possible nucleotide combinations at that position: - N = A mixture of A, T, G, and C - NNN = All 64 possible codons (4³ = 64)\nThis approach allows: - Saturation mutagenesis: Testing all possible amino acid substitutions at a position - Structure-function studies: Identifying critical residues in proteins - Protein engineering: Optimizing enzyme activity or stability\n\n\nDeep Sequencing of Mutagenesis Libraries\nAfter the mutagenesis reaction, the resulting DNA library contains a mixture of variants with different codons at the target position. Next-generation sequencing technologies allow researchers to sequence thousands or millions of these variants simultaneously.\nOligoSeeker helps analyze this sequencing data by: 1. Identifying reads that contain the mutagenic oligo 2. Extracting the specific codon present at the NNN position 3. Counting the frequency of each codon variant\nThis information is crucial for: - Verifying library coverage (were all possible codons incorporated?) - Quantifying biases in the mutagenesis process - Analyzing selection experiments where certain variants may be enriched",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#how-it-works",
+    "href": "index.html#how-it-works",
+    "title": "OligoSeeker",
+    "section": "How It Works",
+    "text": "How It Works\nOligoSeeker searches for specific oligonucleotide patterns in paired FASTQ reads. When it finds a match, it extracts the codon sequence (represented by NNN in the oligo pattern) and tallies its occurrence. The library handles both forward and reverse complement matching, ensuring comprehensive detection.\nThe basic count workflow is: 1. Load and validate oligo sequences 2. Process paired FASTQ files 3. Count codon occurrences for each oligo 4. Output results in CSV format\nAdditionally, the merge workflow allows you to: 1. Process multiple samples independently 2. Combine the count results from different runs 3. Sum the codon occurrences across samples 4. Analyze patterns across a larger dataset",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#performance-and-compatibility",
+    "href": "index.html#performance-and-compatibility",
+    "title": "OligoSeeker",
+    "section": "Performance and Compatibility",
+    "text": "Performance and Compatibility\nOligoSeeker has been tested on both Linux and macOS platforms\n\nTest Case: 1 oligo (33 bp) analyzed in 150 bp paired-end FASTQ files containing 300 million reads\nProcessing Time:\n\n~1 hour on a high-performance compute cluster\n~1.5 hours on a standard MacBook Pro\n\n\n\nScalability\nFor large datasets, we’ve implemented an efficient workflow to significantly increase throughput:\n\nFile Splitting: Large FASTQ files are split into smaller chunks using seqkit, a high-performance toolkit for FASTA/Q file manipulation\nParallel Processing: OligoSeeker is applied in parallel to each chunk independently\nResult Merging: Individual results are merged using OligoSeeker’s built-in merge functionality",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#quick-start",
+    "href": "index.html#quick-start",
+    "title": "OligoSeeker",
+    "section": "Quick Start",
+    "text": "Quick Start\n\nCommand-Line Usage\n# Basic usage with oligos\n!oligoseeker -m count \\\n--f1 ../test_files/test_1.fq.gz \\\n--f2 ../test_files/test_2.fq.gz \\\n--oligos \"GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT\" \\\n--output ../test_files/test_outs --prefix test_cm3\n\n# Basic usage with oligos files\noligoseeker -m count \\\n--f1 ../test_files/test_1.fq.gz \\\n--f2 ../test_files/test_2.fq.gz \\\n--oligos-file '../test_files/oligos.txt' \\\n--output ../test_files/test_outs --prefix test_cm4\n\n# Basic usage to merge oligo counts\noligoseeker -m merge \\\n--output-file 'merge_cl.csv' \\\n--input-dir ../test_files/test_outs \\\n--output ../test_files/merged \n\n\nPython API Usage\nHere’s a simple example of using the Python API:\n\nfrom OligoSeeker.pipeline import PipelineConfig, OligoCodonPipeline\nfrom typing import Dict, List, Tuple, Set\n# Create a configuration\nconfig = PipelineConfig(\n    fastq_1=\"../test_files/test_1.fq.gz\",\n    fastq_2=\"../test_files/test_1.fq.gz\",\n    oligos_list=[\"GCGGATTACATTNNNAAATAACATCGT\", \"TGTGGTAAGCGGNNNGAAAGCATTTGT\", \"GTCGTAGAAAATNNNTGGGTGATGAGC\"],\n    output_path=\"../test_files/test_outs\",\n    output_prefix='test1'\n)\n\n# Create and run the pipeline\npipeline = OligoCodonPipeline(config)\nresults = pipeline.run()\n\n# Print the locations of output files\nprint(f\"Results saved to: {results['csv_path']}\")\n\n/Users/MTinti/miniconda3/envs/work3/lib/python3.10/site-packages/pandas/core/arrays/masked.py:60: UserWarning: Pandas requires version '1.3.6' or newer of 'bottleneck' (version '1.3.4' currently installed).\n  from pandas.core import (\n2025-03-12 15:10:00,869 - INFO - Starting OligoCodonPipeline\n2025-03-12 15:10:00,869 - INFO - Loading oligo sequences...\n2025-03-12 15:10:00,870 - INFO - Using provided oligo list\n2025-03-12 15:10:00,870 - INFO - Loaded 3 oligo sequences\n2025-03-12 15:10:00,871 - INFO - Processing FASTQ files...\n\n\n\n\n\n2025-03-12 15:10:00,974 - INFO - Formatting results...\n2025-03-12 15:10:00,976 - INFO - Saving results to: ../test_files/test_outs/test1_counts.csv\n2025-03-12 15:10:01,000 - INFO - Pipeline completed in 0.13 seconds\n\n\nResults saved to: ../test_files/test_outs/test1_counts.csv\n\n\n\n# this should show 20 (ACT), 40 (GGC) and 60 matches (AAA) for\n# oligo 1, 2 and 3 respectievely\nimport pandas as pd\nout = pd.read_csv(results['csv_path'],index_col=[0])\nout.head()\n\n\n\n\n\n\n\n\n1_GCGGATTACATTNNNAAATAACATCGT\n2_TGTGGTAAGCGGNNNGAAAGCATTTGT\n3_GTCGTAGAAAATNNNTGGGTGATGAGC\n\n\n\n\nnone\n1980.0\n1960.0\n1940.0\n\n\nACT\n20.0\n0.0\n0.0\n\n\nGGC\n0.0\n40.0\n0.0\n\n\nAAA\n0.0\n0.0\n60.0\n\n\n\n\n\n\n\nHere’s a simple example of using the Python API with oligo listed in a file:\n\nfrom OligoSeeker.pipeline import PipelineConfig, OligoCodonPipeline\nfrom typing import Dict, List, Tuple, Set\n# Create a configuration\nconfig = PipelineConfig(\n    fastq_1=\"../test_files/test_1.fq.gz\",\n    fastq_2=\"../test_files/test_1.fq.gz\",\n    oligos_file=\"../test_files/oligos.txt\",\n    output_path=\"../test_files/test_outs\",\n    output_prefix='test2'\n)\n\n\n\n# Create and run the pipeline\npipeline = OligoCodonPipeline(config)\nresults = pipeline.run()\n\n# Print the locations of output files\nprint(f\"Results saved to: {results['csv_path']}\")\n\n2025-03-12 15:10:01,100 - INFO - Starting OligoCodonPipeline\n2025-03-12 15:10:01,101 - INFO - Loading oligo sequences...\n2025-03-12 15:10:01,101 - INFO - Loading oligos from file: ../test_files/oligos.txt\n2025-03-12 15:10:01,103 - INFO - Loaded 3 oligo sequences\n2025-03-12 15:10:01,103 - INFO - Processing FASTQ files...\n\n\n\n\n\n2025-03-12 15:10:01,154 - INFO - Formatting results...\n2025-03-12 15:10:01,156 - INFO - Saving results to: ../test_files/test_outs/test2_counts.csv\n2025-03-12 15:10:01,160 - INFO - Pipeline completed in 0.06 seconds\n\n\nResults saved to: ../test_files/test_outs/test2_counts.csv\n\n\n\n\nMerging Count Files\nYou can merge multiple count files from different runs to combine results:\n\nfrom OligoSeeker.merge import merge_count_csvs\n\n# Merge all count files in a directory\nmerged_df = merge_count_csvs(\n    input_dir=\"../test_files/test_outs\",  # Directory containing count files\n    output_file=\"merged_counts.csv\",      # Output filename\n    output_dir=\"../test_files/merged\",    # Output directory\n    pattern=\"*_counts.csv\"                # Pattern to match files\n)\n\nprint(f\"Merged {len(merged_df)} codons across {len(merged_df.columns)} oligos\")\nmerged_df.head()\n\nFound 4 CSV files to merge\n  Loaded ../test_files/test_outs/test2_counts.csv with 4 rows and 3 columns\n  Loaded ../test_files/test_outs/test1_counts.csv with 4 rows and 3 columns\n  Loaded ../test_files/test_outs/test_cm3_counts.csv with 4 rows and 3 columns\n  Loaded ../test_files/test_outs/test_cm4_counts.csv with 4 rows and 3 columns\nMerged data saved to ../test_files/merged/merged_counts.csv\nMerged 4 codons across 3 oligos\n\n\n\n\n\n\n\n\n\n1_GCGGATTACATTNNNAAATAACATCGT\n2_TGTGGTAAGCGGNNNGAAAGCATTTGT\n3_GTCGTAGAAAATNNNTGGGTGATGAGC\n\n\n\n\nAAA\n0.0\n0.0\n240.0\n\n\nACT\n80.0\n0.0\n0.0\n\n\nGGC\n0.0\n160.0\n0.0\n\n\nnone\n7920.0\n7840.0\n7760.0",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#modules",
+    "href": "index.html#modules",
+    "title": "OligoSeeker",
+    "section": "Modules",
+    "text": "Modules\nOligoSeeker is organized into several modules:\n\nCore\nThe core module contains fundamental utilities and classes: - DNA sequence operations (reverse complement, etc.) - OligoRegex for pattern matching - OligoLoader for loading and validating oligo sequences\n\n\nFASTQ Processing\nThe FASTQ module handles reading and processing FASTQ files: - FastqHandler for file operations - OligoCodonProcessor for counting codons in FASTQ files\n\n\nOutput\nThe output module manages results formatting and saving: - ResultsFormatter for converting results to DataFrames - ResultsSaver for saving to various file formats\n\n\nPipeline\nThe pipeline module provides the complete processing pipeline: - PipelineConfig for configuration settings - ProgressReporter for progress tracking - OligoCodonPipeline for end-to-end processing\n\n\nMerge\nThe merge module provides functionality to combine multiple count results: - Merge count CSV files by summing values - Support for flexible output naming and location - Pattern matching to select specific files\n\n\nCLI\nThe CLI module implements the command-line interface: - Argument parsing - Configuration validation - Pipeline execution",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#quick-start-1",
+    "href": "index.html#quick-start-1",
+    "title": "OligoSeeker",
+    "section": "Quick Start",
+    "text": "Quick Start\n\nCommand-Line Usage\nFor count mode (processing FASTQ files):\n# Using oligos directly specified\noligoseeker -m count --f1 test_files/test_1.fq.gz --f2 test_files/test_2.fq.gz \\\n--oligos \"GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT\" \\\n--output test_outs --prefix test_run1\n\n# Using oligos from a file\noligoseeker -m count --f1 test_files/test_1.fq.gz --f2 test_files/test_2.fq.gz \\\n--oligos-file test_files/oligos.txt --output test_outs --prefix test_run2\nFor merge mode (combining multiple count files):\n# Merge all count files in a directory\noligoseeker -m merge --input-dir test_outs --output test_outs/merged \\\n--output-file combined_counts.csv",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#cli-reference",
+    "href": "index.html#cli-reference",
+    "title": "OligoSeeker",
+    "section": "CLI Reference",
+    "text": "CLI Reference\nusage: oligoseeker [-h] [-m {count,merge}] [--f1 FASTQ_PATH_1] [--f2 FASTQ_PATH_2]\n                  [--oligos-file OLIGOS_FILE] [--oligos OLIGOS_STRING]\n                  [--offset OFFSET_OLIGO] [--input-dir INPUT_DIR]\n                  [--output-file OUTPUT_FILE] [--pattern PATTERN]\n                  [-o OUTPUT_PATH] [--prefix OUTPUT_PREFIX]\n                  [--log-file LOG_FILE]\n                  [--log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}]\n\nOligoSeeker: Process FASTQ files to count oligo codons\n\noptions:\n  -h, --help            show this help message and exit\n  -m {count,merge}, --mode {count,merge}\n                        Operation mode: 'count' to process FASTQ files or 'merge' to combine CSV counts (default: count)\n  -o OUTPUT_PATH, --output OUTPUT_PATH\n                        Output directory for results (default: ../test_files/test_outs)\n  --prefix OUTPUT_PREFIX\n                        Prefix for output files (default: )\n  --log-file LOG_FILE   Path to log file (if not specified, logs to console only)\n  --log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}\n                        Logging level (default: INFO)\n\nCount Mode Options:\n  --f1 FASTQ_PATH_1, --fastq_1 FASTQ_PATH_1\n                        Path to FASTQ 1 file (default: ../test_fastq_files/test_1.fq.gz)\n  --f2 FASTQ_PATH_2, --fastq_2 FASTQ_PATH_2\n                        Path to FASTQ 2 file (default: ../test_fastq_files/test_2.fq.gz)\n\nOligo Source Options:\n  --oligos-file OLIGOS_FILE\n                        File containing oligo sequences (one per line)\n  --oligos OLIGOS_STRING\n                        Comma-separated list of oligo sequences\n                        (default: GCGGATTACATTNNNAAATAACATCGT,TGTGGTAAGCGGNNNGAAAGCATTTGT,GTCGTAGAAAATNNNTGGGTGATGAGC)\n  --offset OFFSET_OLIGO\n                        Value to add to oligo index in output (default: 1)\n\nMerge Mode Options:\n  --input-dir INPUT_DIR\n                        Directory containing CSV files to merge (required for merge mode)\n  --output-file OUTPUT_FILE\n                        Name of the output merged file (default: merged_counts.csv)\n  --pattern PATTERN     Pattern to match CSV files (default: *count*.csv)",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#data-requirements",
+    "href": "index.html#data-requirements",
+    "title": "OligoSeeker",
+    "section": "Data Requirements",
+    "text": "Data Requirements\nOligoSeeker works with standard paired FASTQ files, which should be named according to common conventions:\n\nRead 1: *_1.fq.gz, *_R1.fastq.gz, or *_R1_001.fastq.gz\nRead 2: *_2.fq.gz, *_R2.fastq.gz, or *_R2_001.fastq.gz\n\nThe oligo sequences should include a codon site marked with NNN. For example:\nGAACNNNCAT\nTGACNNNTAG\nThis specifies that the 3 bases following GAAC or TGAC should be captured as the codon.",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#contributing",
+    "href": "index.html#contributing",
+    "title": "OligoSeeker",
+    "section": "Contributing",
+    "text": "Contributing\nContributions are welcome! Please feel free to submit a Pull Request.\n\nDevelopment Setup\n\nClone the repository\nInstall development dependencies:\npip install -e \".[dev]\"\npip install nbdev\nMake changes to the notebook files in the nbs directory\nBuild the library:\nnbdev_build_lib\nBuild the documentation:\nnbdev_build_docs",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  },
+  {
+    "objectID": "index.html#license",
+    "href": "index.html#license",
+    "title": "OligoSeeker",
+    "section": "License",
+    "text": "License\nThis project is licensed under the Apache 2.0 License - see the LICENSE file for details.",
+    "crumbs": [
+      "OligoSeeker"
+    ]
+  }
+]
